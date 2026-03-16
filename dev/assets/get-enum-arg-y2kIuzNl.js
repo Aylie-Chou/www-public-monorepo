@@ -1,0 +1,1 @@
+function i(o,a){return{defaultValue:a,options:Object.values(o),control:{type:"radio"}}}function s(o,a){const r=Object.keys(o).filter(t=>Number.isNaN(Number(t))),e={};r.forEach(t=>{e[t]=o[t]});const n=r.find(t=>o[t]===a)||r[0];return{defaultValue:o[n],options:r,mapping:e,control:{type:"radio"}}}export{s as a,i as g};
