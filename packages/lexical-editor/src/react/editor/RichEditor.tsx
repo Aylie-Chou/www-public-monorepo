@@ -16,6 +16,7 @@ import InfoboxPlugin from '../plugins/InfoboxPlugin'
 import DragDropImagePlugin from '../plugins/ImagePlugin/DragDropImagePlugin'
 import QuotePlugin from '../plugins/QuotePlugin'
 import SlideShowPlugin from '../plugins/SlideShowPlugin'
+import DividerPlugin from '../plugins/DividerPlugin'
 // components
 import ContentEditable from './ContentEditable'
 // types
@@ -53,6 +54,7 @@ export default function Editor({
   const enableEmbeddedCode = config.features?.embeddedCode !== false
   const enableQuote = config.features?.quote !== false
   const enableInfobox = config.features?.infobox !== false
+  const enableDivider = config.features?.divider !== false
   const enableSlideShow =
     config.features?.slideShow !== false &&
     config.image?.imageFromDb !== undefined
@@ -102,6 +104,7 @@ export default function Editor({
         {enableAnnotation && <AnnotationPlugin />}
         {enableQuote && <QuotePlugin />}
         {enableInfobox && <InfoboxPlugin />}
+        {enableDivider && <DividerPlugin />}
         {enableEmbeddedCode && <EmbeddedCodePlugin />}
         {enableImage && <ImagePlugin />}
         {enableSlideShow && <SlideShowPlugin />}

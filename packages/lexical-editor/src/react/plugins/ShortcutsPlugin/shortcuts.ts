@@ -21,6 +21,7 @@ export const SHORTCUTS = Object.freeze({
   QUOTE: IS_APPLE ? '⌘+Opt+Q' : 'Ctrl+Alt+Q',
   INFOBOX: IS_APPLE ? '⌘+Opt+B' : 'Ctrl+Alt+B',
   ANNOTATION: IS_APPLE ? '⌘+Opt+A' : 'Ctrl+Alt+A',
+  DIVIDER: IS_APPLE ? '⌘+Opt+L' : 'Ctrl+Alt+L',
   IMAGE_LINK: IS_APPLE ? '⌘+Opt+K' : 'Ctrl+Alt+K',
   IMAGE_FROM_DB: IS_APPLE ? '⌘+Opt+I' : 'Ctrl+Alt+I',
   EMBEDDED_CODE: IS_APPLE ? '⌘+Opt+E' : 'Ctrl+Alt+E',
@@ -272,6 +273,13 @@ export function isInsertInfobox(event: KeyboardEvent): boolean {
   const { code, shiftKey, altKey, metaKey, ctrlKey } = event
   return (
     code === 'KeyB' && !shiftKey && altKey && controlOrMeta(metaKey, ctrlKey)
+  )
+}
+
+export function isInsertDivider(event: KeyboardEvent): boolean {
+  const { code, shiftKey, altKey, metaKey, ctrlKey } = event
+  return (
+    code === 'KeyL' && !shiftKey && altKey && controlOrMeta(metaKey, ctrlKey)
   )
 }
 

@@ -107,6 +107,7 @@ const config = createLexicalEditorConfig()
 Theme tokens are exposed as CSS custom properties on the `.lexical-editor` root so editor CSS and plugin node CSS can share the same theme values. Set token values to CSS values, such as `#ffffff` or `rgb(250, 251, 252)`.
 
 `theme.tokens.colorBgCanvas` controls the editable editor canvas background.
+`theme.tokens.colorDivider` controls divider color.
 
 ### Feature Flags
 
@@ -119,6 +120,7 @@ const config: EditorConfig = {
   ui: { toolbar: true },
   features: {
     annotation: false,
+    divider: false,
     h4: false
   }
 }

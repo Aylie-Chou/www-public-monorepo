@@ -26,6 +26,7 @@ const themeTokenCssVariables: Record<keyof EditorThemeTokens, `--${string}`> = {
   colorText: '--twreporter-lexical-color-text',
   colorLinkHover: '--twreporter-lexical-color-link-hover',
   colorLinkBottom: '--twreporter-lexical-color-link-bottom',
+  colorDivider: '--twreporter-lexical-color-divider',
   colorInfoboxText: '--twreporter-lexical-color-infobox-text',
   colorInfoboxDressing: '--twreporter-lexical-color-infobox-dressing',
   colorBgInfobox: '--twreporter-lexical-color-bg-infobox',

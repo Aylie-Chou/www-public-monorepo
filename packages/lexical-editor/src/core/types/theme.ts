@@ -67,6 +67,7 @@ export type EditorThemeTokens = {
   colorText?: string
   colorLinkHover?: string
   colorLinkBottom?: string
+  colorDivider?: string
   colorInfoboxText?: string
   colorBgInfobox?: string
   colorInfoboxDressing?: string

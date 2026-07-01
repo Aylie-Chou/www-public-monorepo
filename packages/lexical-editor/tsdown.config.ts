@@ -26,6 +26,7 @@ export default defineConfig({
       'react/jsx-dev-runtime',
       'lexical',
       '@lexical/react',
+      '@lexical/extension',
       '@lexical/link',
       '@lexical/table',
       '@lexical/code',

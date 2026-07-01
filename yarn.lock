@@ -3880,7 +3880,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lexical/extension@npm:0.42.0":
+"@lexical/extension@npm:0.42.0, @lexical/extension@npm:^0.42.0":
   version: 0.42.0
   resolution: "@lexical/extension@npm:0.42.0"
   dependencies:
@@ -7071,6 +7071,7 @@ __metadata:
     "@emotion/react": "npm:^11.14.0"
     "@emotion/styled": "npm:^11.14.1"
     "@lexical/code": "npm:^0.42.0"
+    "@lexical/extension": "npm:^0.42.0"
     "@lexical/link": "npm:^0.42.0"
     "@lexical/list": "npm:^0.42.0"
     "@lexical/overflow": "npm:^0.42.0"
@@ -7094,6 +7095,7 @@ __metadata:
     "@emotion/react": ^11
     "@emotion/styled": ^11
     "@lexical/code": "*"
+    "@lexical/extension": "*"
     "@lexical/link": "*"
     "@lexical/list": "*"
     "@lexical/overflow": "*"

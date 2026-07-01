@@ -10,6 +10,7 @@ export const createTailwindEditorTheme = (): EditorTheme => {
         h3: 'text-xl font-semibold mb-2',
         h4: 'text-lg font-semibold mb-2',
       },
+      hr: 'w-full h-px border-0 bg-gray-300',
       text: {
         bold: 'font-bold',
         italic: 'italic',

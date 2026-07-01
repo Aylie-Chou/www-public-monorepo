@@ -20,6 +20,7 @@ import {
 } from '@lexical/utils'
 import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link'
 import { $isListNode, ListNode } from '@lexical/list'
+import { INSERT_HORIZONTAL_RULE_COMMAND } from '@lexical/extension'
 import {
   $getSelection,
   $isRangeSelection,
@@ -132,6 +133,7 @@ export default function ToolbarPlugin({
   const enableEmbeddedCode = features?.embeddedCode !== false
   const enableQuote = features?.quote !== false
   const enableInfobox = features?.infobox !== false
+  const enableDivider = features?.divider !== false
   const enableH4 = features?.h4 !== false
   const enableImageFromDb =
     enableImage && imageConfig?.imageFromDb !== undefined
@@ -142,6 +144,7 @@ export default function ToolbarPlugin({
     enableEmbeddedCode ||
     enableQuote ||
     enableInfobox ||
+    enableDivider ||
     enableSlideShow
 
   // custom plugin state
@@ -768,6 +771,25 @@ export default function ToolbarPlugin({
                     <span className="text">Slideshow</span>
                   </div>
                   <span className="shortcut">{SHORTCUTS.SLIDE_SHOW}</span>
+                </DropDownItem>
+              )}
+              {enableDivider && (
+                <DropDownItem
+                  onClick={() => {
+                    activeEditor.dispatchCommand(
+                      INSERT_HORIZONTAL_RULE_COMMAND,
+                      undefined
+                    )
+                  }}
+                  className={`item wide`}
+                  title="Divider"
+                  aria-label="add divider"
+                >
+                  <div className="icon-text-container">
+                    <i className="icon divider-button" />
+                    <span className="text">Divider</span>
+                  </div>
+                  <span className="shortcut">{SHORTCUTS.DIVIDER}</span>
                 </DropDownItem>
               )}
             </DropDown>

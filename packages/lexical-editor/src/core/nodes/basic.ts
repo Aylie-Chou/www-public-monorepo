@@ -5,6 +5,7 @@ import { OverflowNode } from '@lexical/overflow'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { AutoLinkNode, LinkNode } from '@lexical/link'
 import { ListItemNode, ListNode } from '@lexical/list'
+import { HorizontalRuleNode } from '@lexical/extension'
 // custom nodes
 import {
   AnnotatedTextNode,
@@ -29,6 +30,7 @@ export const basicEditorNodes: Array<Klass<LexicalNode>> = [
   LinkNode,
   ListItemNode,
   ListNode,
+  HorizontalRuleNode,
   AnnotationNode,
   AnnotatedTextNode,
   AnnotationContentNode,
