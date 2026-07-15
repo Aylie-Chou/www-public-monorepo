@@ -2,7 +2,6 @@ import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext
 import {
   $applyNodeReplacement,
   $getNodeByKey,
-  addClassNamesToElement,
   DecoratorNode,
   type DOMConversionMap,
   type DOMConversionOutput,
@@ -11,6 +10,7 @@ import {
   type LexicalNode,
   type NodeKey,
 } from 'lexical'
+import { addClassNamesToElement } from '@lexical/utils'
 import { type FC, type ReactNode, useEffect, useState } from 'react'
 
 import SlideShowDisplayMode from '../components/SlideShowDisplayMode'

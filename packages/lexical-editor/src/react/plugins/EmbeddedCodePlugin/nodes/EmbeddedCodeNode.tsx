@@ -1,13 +1,13 @@
 import {
   $applyNodeReplacement,
   $getNodeByKey,
-  addClassNamesToElement,
   DecoratorNode,
   type EditorConfig,
   type LexicalNode,
   type NodeKey,
 } from 'lexical'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { addClassNamesToElement } from '@lexical/utils'
 import { type FC, type ReactNode, useEffect, useState } from 'react'
 
 import EmbeddedCodeDisplayMode from '../components/EmbeddedCodeDisplayMode'

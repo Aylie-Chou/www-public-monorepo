@@ -1,6 +1,5 @@
 import {
   $applyNodeReplacement,
-  addClassNamesToElement,
   type LexicalNode,
   DecoratorNode,
   type NodeKey,
@@ -11,6 +10,7 @@ import {
   type DOMExportOutput,
 } from 'lexical'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+import { addClassNamesToElement } from '@lexical/utils'
 import {
   type ReactNode,
   type FC,

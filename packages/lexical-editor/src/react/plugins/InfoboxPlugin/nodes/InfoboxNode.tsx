@@ -1,6 +1,5 @@
 import {
   $applyNodeReplacement,
-  addClassNamesToElement,
   ElementNode,
   type DOMConversionMap,
   type DOMConversionOutput,
@@ -9,6 +8,7 @@ import {
   type LexicalNode,
   type SerializedElementNode,
 } from 'lexical'
+import { addClassNamesToElement } from '@lexical/utils'
 
 const infoboxNodeType = 'infobox'
 const infoboxAttribute = 'data-lexical-infobox'
@@ -34,6 +34,10 @@ export class InfoboxNode extends ElementNode {
 
   override isInline(): false {
     return false
+  }
+
+  override isShadowRoot(): true {
+    return true
   }
 
   override createDOM(config: EditorConfig): HTMLElement {

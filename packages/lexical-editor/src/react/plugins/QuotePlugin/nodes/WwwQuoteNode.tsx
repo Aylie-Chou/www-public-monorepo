@@ -1,6 +1,5 @@
 import {
   $applyNodeReplacement,
-  addClassNamesToElement,
   ElementNode,
   type DOMConversionMap,
   type DOMConversionOutput,
@@ -11,6 +10,7 @@ import {
   type SerializedElementNode,
   type Spread,
 } from 'lexical'
+import { addClassNamesToElement } from '@lexical/utils'
 
 import {
   isWwwQuoteLayout,

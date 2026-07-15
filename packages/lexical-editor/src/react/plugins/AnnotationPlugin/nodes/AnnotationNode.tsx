@@ -1,5 +1,4 @@
 import {
-  addClassNamesToElement,
   ElementNode,
   type LexicalNode,
   type NodeKey,
@@ -11,6 +10,7 @@ import {
   type Spread,
   type DOMExportOutput,
 } from 'lexical'
+import { addClassNamesToElement } from '@lexical/utils'
 
 // type
 
