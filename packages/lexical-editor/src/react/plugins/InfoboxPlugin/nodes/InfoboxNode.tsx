@@ -1,5 +1,6 @@
 import {
   $applyNodeReplacement,
+  addClassNamesToElement,
   ElementNode,
   type DOMConversionMap,
   type DOMConversionOutput,
@@ -38,7 +39,7 @@ export class InfoboxNode extends ElementNode {
   override createDOM(config: EditorConfig): HTMLElement {
     const themeClass = config.theme.infobox ?? 'TwreporterTheme__infobox'
     const div = document.createElement('div')
-    div.classList.add(themeClass, 'Infobox__container')
+    addClassNamesToElement(div, themeClass, 'Infobox__container')
     div.setAttribute(infoboxAttribute, 'true')
     return div
   }

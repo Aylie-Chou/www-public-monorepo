@@ -1,5 +1,6 @@
 import {
   $applyNodeReplacement,
+  addClassNamesToElement,
   type LexicalNode,
   DecoratorNode,
   type NodeKey,
@@ -223,7 +224,12 @@ export class ImageNode extends DecoratorNode<ReactNode> {
   override createDOM(config: EditorConfig): HTMLElement {
     const themeClass = config.theme.image ?? 'TwreporterTheme__image'
     const div = document.createElement('div')
-    div.classList.add(themeClass, 'Image__content', this.__imageLayout)
+    addClassNamesToElement(
+      div,
+      themeClass,
+      'Image__content',
+      this.__imageLayout
+    )
 
     return div
   }

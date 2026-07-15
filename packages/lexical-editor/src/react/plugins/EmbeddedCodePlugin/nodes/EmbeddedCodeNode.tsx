@@ -1,6 +1,7 @@
 import {
   $applyNodeReplacement,
   $getNodeByKey,
+  addClassNamesToElement,
   DecoratorNode,
   type EditorConfig,
   type LexicalNode,
@@ -137,7 +138,12 @@ export class EmbeddedCodeNode extends DecoratorNode<ReactNode> {
     const themeClass =
       config.theme.embeddedCode ?? 'TwreporterTheme__embeddedCode'
     const div = document.createElement('div')
-    div.classList.add(themeClass, 'EmbeddedCode__content', this.__layout)
+    addClassNamesToElement(
+      div,
+      themeClass,
+      'EmbeddedCode__content',
+      this.__layout
+    )
 
     return div
   }
