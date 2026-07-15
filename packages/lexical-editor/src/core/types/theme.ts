@@ -57,6 +57,7 @@ export type EditorThemeClasses = {
   }
   link?: string
   annotation?: string
+  embeddedCode?: string
   image?: string
   infobox?: string
   slideshow?: string

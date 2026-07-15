@@ -107,18 +107,7 @@
   font-weight: normal;
   font-size: 14px;
   margin: 12px 0 30px;
-
-  &::after {
-    content: '';
-    height: 1px;
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 100%;
-    border-width: 0 0 1px;
-    border-style: solid;
-    border-color: #c09662;
-  }
+  border-bottom: 1px solid #c09662;
 }
 
 .EmbeddedCode__edit {

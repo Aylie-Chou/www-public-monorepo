@@ -4,9 +4,9 @@ import {
   INSERT_HORIZONTAL_RULE_COMMAND,
 } from '@lexical/extension'
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
-import { $insertNodeToNearestRoot } from '@lexical/utils'
 import {
   $getSelection,
+  $insertNodes,
   $isRangeSelection,
   COMMAND_PRIORITY_EDITOR,
 } from 'lexical'
@@ -30,7 +30,7 @@ const DividerPlugin: FC = () => {
           return false
         }
 
-        $insertNodeToNearestRoot($createHorizontalRuleNode())
+        $insertNodes([$createHorizontalRuleNode()])
         return true
       },
       COMMAND_PRIORITY_EDITOR

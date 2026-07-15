@@ -22,6 +22,7 @@ export const createTailwindEditorTheme = (): EditorTheme => {
         ol: 'list-decimal pl-6',
       },
       link: 'text-blue-600 underline',
+      embeddedCode: 'my-4',
     },
   }
 }

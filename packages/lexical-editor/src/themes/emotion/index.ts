@@ -34,6 +34,7 @@ export const createEmotionEditorTheme = (): EditorTheme => {
       },
       link: 'TwreporterTheme__link',
       annotation: 'TwreporterTheme__annotation',
+      embeddedCode: 'TwreporterTheme__embeddedCode',
       image: 'TwreporterTheme__image',
       infobox: 'TwreporterTheme__infobox',
       slideshow: 'TwreporterTheme__slideshow',

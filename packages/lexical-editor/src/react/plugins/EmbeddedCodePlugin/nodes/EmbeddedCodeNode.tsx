@@ -133,9 +133,11 @@ export class EmbeddedCodeNode extends DecoratorNode<ReactNode> {
     return false
   }
 
-  override createDOM(_config: EditorConfig): HTMLElement {
+  override createDOM(config: EditorConfig): HTMLElement {
+    const themeClass =
+      config.theme.embeddedCode ?? 'TwreporterTheme__embeddedCode'
     const div = document.createElement('div')
-    div.classList.add('EmbeddedCode__content', this.__layout)
+    div.classList.add(themeClass, 'EmbeddedCode__content', this.__layout)
 
     return div
   }
