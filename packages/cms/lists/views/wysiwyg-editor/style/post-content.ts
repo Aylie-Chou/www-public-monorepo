@@ -215,6 +215,7 @@ export const PostContentStyleWrapper = styled.div`
           padding: 0;
         }
         .SlideShow__media {
+          grid-column: 1 / -1;
           width: calc(100% + 2 * var(--article-gutter));
           margin-left: calc(-1 * var(--article-gutter));
         }

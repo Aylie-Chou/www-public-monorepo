@@ -15,6 +15,8 @@ import type React from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { EyeDropper, isSupportEyeDropper } from './eye-dropper'
 
+const DEFAULT_COLOR = '#9F7544'
+
 const ColorContainer = styled.div`
   width: 454px;
   border-radius: 5px;
@@ -118,7 +120,7 @@ export const Field = ({
   value,
   onChange,
 }: FieldProps<typeof controller>) => {
-  const color = value || '#9F7544'
+  const color = value || DEFAULT_COLOR
   const setColor = (nextColor: string) => {
     if (nextColor !== color) onChange?.(nextColor)
   }
@@ -193,7 +195,7 @@ export const controller = (
     label: config.label,
     description: config.description,
     graphqlSelection: config.fieldKey,
-    defaultValue: null,
+    defaultValue: DEFAULT_COLOR,
     deserialize: (data) => {
       const value = data[config.fieldKey]
       return typeof value === 'string' ? value : null

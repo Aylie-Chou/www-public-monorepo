@@ -9,6 +9,7 @@ import { Icon } from '@keystar/ui/icon'
 import { plusCircleIcon } from '@keystar/ui/icon/icons/plusCircleIcon'
 import { trashIcon } from '@keystar/ui/icon/icons/trashIcon'
 import { Divider as KeystarDivider } from '@keystar/ui/layout'
+import { tokenSchema } from '@keystar/ui/style'
 import { toastQueue } from '@keystar/ui/toast'
 import type { ComponentProps, PropsWithChildren, ReactNode } from 'react'
 
@@ -54,7 +55,7 @@ export function Button({
 }: PropsWithChildren<{
   weight?: 'bold' | 'none' | 'light' | 'link'
   tone?: 'active' | 'negative' | 'passive'
-  size?: string
+  size?: 'small' | 'medium' | 'large'
   isLoading?: boolean
   isDisabled?: boolean
   onClick?: () => void
@@ -64,6 +65,16 @@ export function Button({
     <KeystarButton
       {...props}
       UNSAFE_className={className}
+      UNSAFE_style={
+        size === 'small' || size === 'large'
+          ? {
+              height: tokenSchema.size.element[size],
+              minWidth: tokenSchema.size.element[size],
+              paddingInline: tokenSchema.size.space[size],
+              fontSize: tokenSchema.typography.text[size].size,
+            }
+          : undefined
+      }
       prominence={
         weight === 'bold' ? 'high' : weight === 'none' ? 'low' : 'default'
       }
