@@ -9,6 +9,7 @@ import React, { useMemo } from 'react'
 // lexical
 import { LexicalEditor } from '@twreporter/lexical-editor'
 import { LexicalBox, StyleWrapper } from './style'
+import { PostContentStyleWrapper } from './style/post-content'
 // config
 import createLexicalEditorConfig, { getFieldFeatureOverride } from './config'
 
@@ -29,18 +30,22 @@ export const Field = ({
       ...(features ? { features } : {}),
     })
   }, [field.listKey, field.fieldKey])
+  const ContentStyle =
+     field.listKey === 'Post' && field.fieldKey === 'content'
+       ? PostContentStyleWrapper
+       : StyleWrapper
 
   return (
     <FieldContainer>
       <FieldLabel>{field.label}</FieldLabel>
       <LexicalBox id="www-lexical-editor">
-        <StyleWrapper>
+        <ContentStyle>
           <LexicalEditor
             value={valueJSON}
             onChange={onChange}
             config={lexicalEditorConfig}
           />
-        </StyleWrapper>
+        </ContentStyle>
       </LexicalBox>
     </FieldContainer>
   )

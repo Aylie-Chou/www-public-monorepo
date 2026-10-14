@@ -1,14 +1,15 @@
 .Annotation__container {
-  display: ruby;
-  flex-direction: column;
+  display: inline;
 }
 
-.Annotation__container[open] {
-  width: 100%;
+/* Let the block content use the surrounding paragraph's full line width. */
+.Annotation__container::details-content {
+  display: contents;
 }
 
 .Annotation__text {
-  color: #9f7544;
+  display: inline;
+  color: #808080;
   cursor: pointer;
 }
 
@@ -27,7 +28,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1px solid #9f7544;
+  border: 1px solid #808080;
   position: relative;
 }
 
@@ -41,7 +42,7 @@
   display: block;
   position: absolute;
   transition: transform 200ms;
-  background-color: rgb(192, 150, 98);
+  background-color: #404040;
 }
 
 .Annotation__indicator::after {
@@ -54,7 +55,7 @@
   display: block;
   position: absolute;
   transition: transform 200ms;
-  background-color: rgb(192, 150, 98);
+  background-color: #404040;
 }
 
 .Annotation__dialog {
@@ -146,11 +147,11 @@
   background-color: #9f7544;
 }
 
-.Annotation__container[open] .Annotation__indicator::before {
+.Annotation__container[open] > .Annotation__text .Annotation__indicator::before {
   transform: rotate(-45deg);
 }
 
-.Annotation__container[open] .Annotation__indicator::after {
+.Annotation__container[open] > .Annotation__text .Annotation__indicator::after {
   transform: rotate(45deg);
 }
 
@@ -158,11 +159,14 @@
   display: none;
 }
 
-.Annotation__container[open] .Annotation__content {
+.Annotation__container[open] > .Annotation__content {
   display: block;
 }
 
 .Annotation__content {
+  box-sizing: border-box;
+  width: 100%;
+  overflow-wrap: anywhere;
   border-top: 2px solid #c09662;
   background-color: white;
   padding: 25px 11px;
