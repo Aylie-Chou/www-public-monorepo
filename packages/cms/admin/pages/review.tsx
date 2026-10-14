@@ -1,15 +1,16 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
 import styled from '@emotion/styled'
 import { gql, useMutation, useQuery } from '@keystone-6/core/admin-ui/apollo'
 import { PageContainer } from '@keystone-6/core/admin-ui/components'
 import { Link } from '@keystone-6/core/admin-ui/router'
-import { Button } from '@keystone-ui/button'
-import { Heading, jsx } from '@keystone-ui/core'
-import { FieldDescription, FieldLabel, MultiSelect } from '@keystone-ui/fields'
-import { AlertDialog } from '@keystone-ui/modals'
-import { useToasts } from '@keystone-ui/toast'
+import { Button } from '../components/controls'
+import { Heading } from '../components/controls'
+import {
+  FieldDescription,
+  FieldLabel,
+  MultiSelect,
+} from '../components/controls'
+import { AlertDialog } from '../components/controls'
+import { useToasts } from '../components/controls'
 import { type ReactNode, useEffect, useMemo, useState } from 'react'
 
 import { DnD } from '../../DragAndDrop'
@@ -147,7 +148,7 @@ const Reviews = () => {
     loading: postsDataLoading,
     error: postsDataError,
     refetch: refetchPosts,
-  } = useQuery(queries.GET_POSTS, {
+  } = useQuery<{ posts: Post[] }>(queries.GET_POSTS, {
     variables: { where: { OR: [] }, orderBy: [{ createdAt: 'desc' }] },
   })
 
@@ -155,7 +156,7 @@ const Reviews = () => {
     data: reviewsData,
     loading: reviewsDataLoading,
     error: reviewsDataError,
-  } = useQuery(queries.GET_REVIEWS, {
+  } = useQuery<{ reviews: Review[] }>(queries.GET_REVIEWS, {
     variables: { where: { OR: [] }, orderBy: [{ order: 'asc' }] },
   })
 
@@ -296,17 +297,13 @@ const Reviews = () => {
           onChange={setSelectedOption}
         />
         {(selectedOption.length > 0 && (
-          <Button
-            size="small"
-            tone="active"
-            weight="link"
-            as={Link}
+          <Link
             href={`/posts?!id_in="${selectedOption
               .map(({ value }) => value)
               .join(',')}"`}
           >
             View related Posts
-          </Button>
+          </Link>
         )) ||
           null}
       </StyledContainer>

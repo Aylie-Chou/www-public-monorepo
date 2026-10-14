@@ -5,15 +5,18 @@ import { allowAllRoles } from './utils/access-control-list'
 const listConfigurations = list({
   fields: {
     user: relationship({
-      label: '使用者',
+      ui: { label: '使用者' },
+
       ref: 'User.postReadingTime',
     }),
     post: relationship({
-      label: '文章',
+      ui: { label: '文章' },
+
       ref: 'Post',
     }),
     seconds: integer({
-      label: '秒數',
+      ui: { label: '秒數' },
+
       defaultValue: 0,
       validation: { min: 0, isRequired: true },
     }),

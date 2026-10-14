@@ -13,7 +13,8 @@ packages/**/dist
 # mac file
 .DS_Store
 
-.yarn
+.yarn/*
+!.yarn/patches/
 .pnp*
 *storybook.log
 storybook-static

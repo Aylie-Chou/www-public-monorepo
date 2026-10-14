@@ -1,0 +1,54 @@
+diff --git a/dist/admin-meta-cache.js b/dist/admin-meta-cache.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..7fc3c43243b0e25ab0397fa35b2282a73b96f19b
+--- /dev/null
++++ b/dist/admin-meta-cache.js
+@@ -0,0 +1,13 @@
++import { InMemoryCache } from '@apollo/client';
++
++export function createAdminMetaCache() {
++  return new InMemoryCache({
++    typePolicies: {
++      // Overview and item queries select different parts of these same objects.
++      KeystoneMeta: { merge: true },
++      KeystoneAdminMeta: { merge: true }
++      // Do not normalize list metadata by key: itemView permissions depend on
++      // the itemId argument and must remain separate for each item query.
++    }
++  });
++}
+diff --git a/dist/context-a4948706.js b/dist/context-a4948706.js
+index a7024de69e955052e58d6bf23921fd3b6e2a95ca..40a0bf1313937f9ca57a1c2f7e22b815c3aaf41c 100644
+--- a/dist/context-a4948706.js
++++ b/dist/context-a4948706.js
+@@ -14,7 +14,8 @@ import { Item } from '@keystar/ui/tag';
+ import { TooltipTrigger, Tooltip } from '@keystar/ui/tooltip';
+ import { Text } from '@keystar/ui/typography';
+ import { jsxs, jsx } from 'react/jsx-runtime';
+-import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
++import { gql, ApolloClient } from '@apollo/client';
++import { createAdminMetaCache } from './admin-meta-cache.js';
+ import { ApolloProvider, useQuery } from '@apollo/client/react';
+ import './keystone-6-core-admin-ui-router.js';
+ import { g as getConditionalFilterFieldKeys, a as getConditionalFilterCaseFieldKeys, i as isActionAvailable } from './filters-2f3f86b6.js';
+@@ -495,7 +496,7 @@ function useNextSearch() {
+ }
+ function KeystoneProvider(props) {
+   const apolloClient = useMemo(() => new ApolloClient({
+-    cache: new InMemoryCache(),
++    cache: createAdminMetaCache(),
+     link: new UploadLink({
+       uri: props.apiPath,
+       headers: {
+diff --git a/dist/keystone-6-core-fields-types-relationship-views.js b/dist/keystone-6-core-fields-types-relationship-views.js
+index 509a4747986e74f52de4006e4515c4026b27c46d..8612163bbb19afa3253e7c20044203d69a230ace 100644
+--- a/dist/keystone-6-core-fields-types-relationship-views.js
++++ b/dist/keystone-6-core-fields-types-relationship-views.js
+@@ -788,7 +788,6 @@ function Field(props) {
+             href: item.built ? '' : `/${foreignList.path}/${item.id}`
+           };
+         }),
+-        maxRows: 2,
+         onRemove: isReadOnly ? undefined : keys => {
+           onChange === null || onChange === void 0 || onChange({
+             ...value,

@@ -6,11 +6,13 @@ import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 const listConfigurations = list({
   fields: {
     user: relationship({
-      label: '使用者',
+      ui: { label: '使用者' },
+
       ref: 'User.postReadingFootprint',
     }),
     post: relationship({
-      label: '文章',
+      ui: { label: '文章' },
+
       ref: 'Post',
     }),
     createdAt: CREATED_AT,

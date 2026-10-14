@@ -1,15 +1,22 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-
 import styled from '@emotion/styled'
 import { gql, useMutation, useQuery } from '@keystone-6/core/admin-ui/apollo'
 import { PageContainer } from '@keystone-6/core/admin-ui/components'
-import { Button } from '@keystone-ui/button'
-import { Heading, jsx } from '@keystone-ui/core'
-import { FieldDescription, FieldLabel, MultiSelect } from '@keystone-ui/fields'
-import { AlertDialog } from '@keystone-ui/modals'
-import { useToasts } from '@keystone-ui/toast'
-import { type ReactNod, useCallback, useEffect, useMemo, useState } from 'react'
+import { Button } from '../components/controls'
+import { Heading } from '../components/controls'
+import {
+  FieldDescription,
+  FieldLabel,
+  MultiSelect,
+} from '../components/controls'
+import { AlertDialog } from '../components/controls'
+import { useToasts } from '../components/controls'
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { DnD } from '../../DragAndDrop'
 
@@ -138,7 +145,7 @@ const Latest = () => {
     loading: tagsDataLoading,
     error: tagsDataError,
     refetch: refetchTags,
-  } = useQuery(queries.GET_TAGS, {
+  } = useQuery<{ tags: Tag[] }>(queries.GET_TAGS, {
     variables: { where: { OR: [] }, orderBy: [{ createdAt: 'desc' }] },
   })
 
@@ -146,7 +153,7 @@ const Latest = () => {
     data: latestData,
     loading: latestDataLoading,
     error: latestDataError,
-  } = useQuery(queries.GET_LATEST, {
+  } = useQuery<{ latests: Latest[] }>(queries.GET_LATEST, {
     variables: { where: { OR: [] }, orderBy: [{ order: 'asc' }] },
   })
 

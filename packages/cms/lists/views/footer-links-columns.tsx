@@ -18,12 +18,16 @@ import {
 // emotion
 import styled from '@emotion/styled'
 // keystone
-import type { controller } from '@keystone-6/core/fields/types/virtual/views'
+import type { controller } from '@keystone-6/core/fields/types/json/views'
 import type { FieldProps } from '@keystone-6/core/types'
-import { Button } from '@keystone-ui/button'
-import { Divider } from '@keystone-ui/core'
-import { FieldContainer, FieldLabel, TextInput } from '@keystone-ui/fields'
-import { PlusCircleIcon, TrashIcon } from '@keystone-ui/icons'
+import { Button } from '../../admin/components/controls'
+import { Divider } from '../../admin/components/controls'
+import {
+  FieldContainer,
+  FieldLabel,
+  TextInput,
+} from '../../admin/components/controls'
+import { PlusCircleIcon, TrashIcon } from '../../admin/components/controls'
 
 import { SortableItem } from '../../DragAndDrop/SortableItem'
 

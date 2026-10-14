@@ -1,4 +1,4 @@
-import { graphql, group, list } from '@keystone-6/core'
+import { g as graphql, group, list } from '@keystone-6/core'
 import {
   checkbox,
   json,
@@ -23,8 +23,8 @@ const relatedTopics: OrderedRelationshipConfig = {
   relationshipConfig: {
     ref: 'Topic.relatedPosts',
     many: true,
-    label: '選取',
     ui: {
+      label: '選取',
       hideCreate: true,
     },
   },
@@ -36,8 +36,8 @@ const subcategories: OrderedRelationshipConfig = {
   relationshipConfig: {
     ref: 'Subcategory.posts',
     many: true,
-    label: '選取',
     ui: {
+      label: '選取',
       hideCreate: false,
       labelField: 'nameForCMS',
     },
@@ -50,8 +50,8 @@ const tags: OrderedRelationshipConfig = {
   relationshipConfig: {
     ref: 'Tag.posts',
     many: true,
-    label: '選取',
     ui: {
+      label: '選取',
       hideCreate: false,
       labelField: 'name',
     },
@@ -64,8 +64,8 @@ const beenRelatedPosts: OrderedRelationshipConfig = {
   relationshipConfig: {
     ref: 'Post.relatedPosts',
     many: true,
-    label: '選取',
     ui: {
+      label: '選取',
       hideCreate: true,
       labelField: 'title',
     },
@@ -90,16 +90,19 @@ const listConfigurations = list({
   fields: {
     slug: SLUG,
     title: text({
-      label: '標題',
+      ui: { label: '標題' },
+
       validation: { isRequired: true },
       isIndexed: true,
     }),
     subtitle: text({
-      label: '副標',
+      ui: { label: '副標' },
+
       validation: { isRequired: false },
     }),
     state: select({
-      label: '狀態',
+      ui: { label: '狀態' },
+
       options: [
         { label: 'Draft', value: 'draft' },
         { label: 'Published', value: 'published' },
@@ -110,37 +113,28 @@ const listConfigurations = list({
       defaultValue: 'draft',
       isIndexed: true,
     }),
-    publishedDate: timestamp({
-      isIndexed: true,
-      label: '發布時間',
-    }),
-    updatedDate: timestamp({
-      label: '更新時間',
-    }),
+    publishedDate: timestamp({ ui: { label: '發布時間' }, isIndexed: true }),
+    updatedDate: timestamp({ ui: { label: '更新時間' } }),
     authors: relationship({
       ref: 'Author.posts',
       many: true,
-      label: '作者',
-      ui: {
-        labelField: 'name',
-      },
+
+      ui: { label: '作者', labelField: 'name' },
     }),
     authorsJSON: json({
-      label: '作者列',
       defaultValue: [],
       ui: {
+        label: '作者列',
         views: './lists/views/authorsJSON-editor',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
         itemView: { fieldMode: 'edit' },
       },
     }),
-    heroImage: relationship({
-      ref: 'Photo',
-      label: '首圖',
-    }),
+    heroImage: relationship({ ui: { label: '首圖' }, ref: 'Photo' }),
     heroSize: select({
-      label: '首圖尺寸',
+      ui: { label: '首圖尺寸' },
+
       options: [
         { label: 'Small', value: 'small' },
         { label: 'Medium', value: 'medium' },
@@ -150,12 +144,13 @@ const listConfigurations = list({
       defaultValue: 'medium',
     }),
     heroCaption: text({
-      label: '首圖圖說',
+      ui: { label: '首圖圖說' },
+
       validation: { isRequired: false },
     }),
     brief: json({
-      label: '前言',
       ui: {
+        label: '前言',
         views: './lists/views/wysiwyg-editor',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -163,8 +158,8 @@ const listConfigurations = list({
       },
     }),
     content: json({
-      label: '內文',
       ui: {
+        label: '內文',
         views: './lists/views/wysiwyg-editor',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -174,19 +169,19 @@ const listConfigurations = list({
     postFollowups: relationship({
       ref: 'PostFollowup.posts',
       many: true,
-      label: '後續追蹤',
-      ui: {
-        labelField: 'title',
-      },
+
+      ui: { label: '後續追蹤', labelField: 'title' },
     }),
     ...group({
       label: '分類',
+
       fields: {
         ...relationshipUtil.relationshipAndExtendedFields(subcategories),
       },
     }),
     style: select({
-      label: '文章版式',
+      ui: { label: '文章版式' },
+
       options: [
         { label: 'Default', value: 'default' },
         { label: 'Photography', value: 'photography' },
@@ -198,12 +193,14 @@ const listConfigurations = list({
     }),
     ...group({
       label: '專題',
+
       fields: {
         ...relationshipUtil.relationshipAndExtendedFields(relatedTopics),
       },
     }),
     copyright: select({
-      label: '版權使用',
+      ui: { label: '版權使用' },
+
       options: [
         { label: 'Copyrighted', value: 'copyrighted' },
         { label: 'Creative Commons', value: 'cc' },
@@ -212,57 +209,55 @@ const listConfigurations = list({
     }),
     ...group({
       label: '標籤',
+
       fields: {
         ...relationshipUtil.relationshipAndExtendedFields(tags),
       },
     }),
     ...group({
       label: '相關文章',
+
       fields: {
         ...relationshipUtil.relationshipAndExtendedFields(relatedPosts),
       },
     }),
     reviewWord: text({
-      label: '回顧說明',
       validation: {
         length: {
           max: 18,
         },
       },
-      ui: {
-        description: '18 字元以內',
-      },
+      ui: { label: '回顧說明', description: '18 字元以內' },
     }),
     ogTitle: text({
+      ui: { label: 'og:title' },
       validation: { isRequired: false },
-      label: 'og:title',
     }),
     ogDescription: text({
-      label: 'og:description',
+      ui: { label: 'og:description' },
+
       validation: { isRequired: false },
     }),
-    ogImage: relationship({
-      ref: 'Photo',
-      label: 'og:image',
-    }),
+    ogImage: relationship({ ui: { label: 'og:image' }, ref: 'Photo' }),
     pushNotifications: relationship({
       ref: 'PushNotification.post',
       many: true,
-      label: '推播',
-      ui: {
-        labelField: 'labelForCMS',
-      },
+
+      ui: { label: '推播', labelField: 'labelForCMS' },
     }),
     newPageTargetBlank: checkbox({
-      label: '另開新頁',
+      ui: { label: '另開新頁' },
+
       defaultValue: false,
     }),
     isFeatured: checkbox({
-      label: '首頁大圖輪播',
+      ui: { label: '首頁大圖輪播' },
+
       defaultValue: false,
     }),
     ...group({
       label: '關聯文章',
+
       fields: {
         ...relationshipUtil.relationshipAndExtendedFields(beenRelatedPosts),
       },

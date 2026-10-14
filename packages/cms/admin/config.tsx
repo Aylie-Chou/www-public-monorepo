@@ -1,8 +1,5 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
 import { useEffect } from 'react'
 import type { AdminConfig } from '@keystone-6/core/types'
-import { jsx } from '@keystone-ui/core'
 import { CustomNavigation } from './components/CustomNavigation'
 
 function CustomLogo() {

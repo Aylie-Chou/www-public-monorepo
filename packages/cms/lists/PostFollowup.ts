@@ -9,22 +9,38 @@ import {
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 
 const listConfigurations = list({
+  fieldDefaults: {
+    ui: {
+      itemView: {
+        fieldMode: ({ session }) => {
+          if (
+            [
+              RoleEnum.Owner,
+              RoleEnum.Admin,
+              RoleEnum.Editor,
+              RoleEnum.Contributor,
+            ].indexOf(session?.data.role) > -1
+          ) {
+            return 'edit'
+          } else {
+            return 'read'
+          }
+        },
+      },
+    },
+  },
   fields: {
     title: text({
+      ui: { label: '標題' },
       isIndexed: true,
-      label: '標題',
+
       validation: { isRequired: true },
     }),
-    publishedDate: timestamp({
-      isIndexed: true,
-      label: '發布時間',
-    }),
-    summary: text({
-      label: '摘要',
-    }),
+    publishedDate: timestamp({ ui: { label: '發布時間' }, isIndexed: true }),
+    summary: text({ ui: { label: '摘要' } }),
     content: json({
-      label: '內容',
       ui: {
+        label: '內容',
         views: './lists/views/wysiwyg-editor',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -34,11 +50,8 @@ const listConfigurations = list({
     posts: relationship({
       ref: 'Post.postFollowups',
       many: true,
-      label: '關聯文章',
-      ui: {
-        hideCreate: true,
-        labelField: 'title',
-      },
+
+      ui: { label: '關聯文章', hideCreate: true, labelField: 'title' },
     }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
@@ -86,22 +99,6 @@ const listConfigurations = list({
       RoleEnum.Editor,
       RoleEnum.Contributor,
     ]),
-    itemView: {
-      defaultFieldMode: ({ session }) => {
-        if (
-          [
-            RoleEnum.Owner,
-            RoleEnum.Admin,
-            RoleEnum.Editor,
-            RoleEnum.Contributor,
-          ].indexOf(session?.data.role) > -1
-        ) {
-          return 'edit'
-        } else {
-          return 'read'
-        }
-      },
-    },
   },
 })
 export default listConfigurations

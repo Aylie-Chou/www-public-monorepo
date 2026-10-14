@@ -1,18 +1,18 @@
-import { graphql } from '@keystone-6/core'
+import { g as graphql } from '@keystone-6/core'
 import {
   json,
   type RelationshipFieldConfig,
   relationship,
   virtual,
 } from '@keystone-6/core/fields'
-import type { BaseListTypeInfo } from '@keystone-6/core/types'
+import type { KeystoneContext, BaseListTypeInfo } from '@keystone-6/core/types'
 import type { RelationshipInfo } from '../views/relationship-order-editor'
 
 const orderJsonSuffix = 'OrderJson'
 
 export type OrderedRelationshipConfig = {
   fieldName: string
-  relationshipConfig: RelationshipFieldConfig<BaseListTypeInfo>
+  relationshipConfig: RelationshipFieldConfig<BaseListTypeInfo, string>
   // refLabelField must be specified because it varies in difference lists,
   // ex: 'title' in Post list/'name' in Tag list
   refLabelField: string
@@ -27,7 +27,7 @@ const relationshipAndExtendedFields = ({
   relationshipConfig,
 }: {
   fieldName: string
-  relationshipConfig: RelationshipFieldConfig<BaseListTypeInfo>
+  relationshipConfig: RelationshipFieldConfig<BaseListTypeInfo, string>
 }) => {
   const relationshipField = fieldName
   const orderJSONField = `${relationshipField}${orderJsonSuffix}`
@@ -41,9 +41,9 @@ const relationshipAndExtendedFields = ({
   return {
     [relationshipField]: relationship(relationshipConfig),
     [orderJSONField]: json({
-      label: '排序',
       defaultValue: [],
       ui: {
+        label: '排序',
         views: './lists/views/relationship-order-editor',
         createView: {
           fieldMode: 'edit',
@@ -80,7 +80,8 @@ const relationshipAndExtendedFields = ({
             })
             const order = source?.[orderJSONField]
             const relationships = source?.[relationshipField]
-            const orderedIds = order?.map((item) => item?.id) ?? []
+            const orderedIds =
+              order?.map((item: { id: string }) => item?.id) ?? []
             const targetIds =
               relationships?.map((relationship: any) => {
                 return relationship?.id
@@ -134,7 +135,17 @@ const mutateOrderFieldHook = ({
   const orderJSONField = `${relationshipField}${orderJsonSuffix}`
   const refList = relationshipConfig?.ref?.split('.')?.[0]
 
-  return async ({ inputData, item, resolvedData, context }) => {
+  return async ({
+    inputData,
+    item,
+    resolvedData,
+    context,
+  }: {
+    inputData: Record<string, any>
+    item?: Record<string, any>
+    resolvedData: Record<string, any>
+    context: KeystoneContext
+  }) => {
     if (!refList) {
       console.error('Invalid ref list!')
       return

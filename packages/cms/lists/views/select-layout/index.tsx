@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
-import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
+import { CellContainer } from '@keystone-6/core/admin-ui/components'
 import type {
-  CardValueComponent,
   CellComponent,
   FieldController,
   FieldControllerConfig,
@@ -11,7 +10,7 @@ import {
   FieldContainer,
   FieldDescription,
   FieldLabel,
-} from '@keystone-ui/fields'
+} from '../../../admin/components/controls'
 import React from 'react'
 
 const Container = styled.div`
@@ -105,8 +104,8 @@ export const Field = ({
 
   return (
     <FieldContainer>
-      <FieldLabel htmlFor={field.path}>{field.label}</FieldLabel>
-      <FieldDescription id={`${field.path}-description`}>
+      <FieldLabel htmlFor={field.fieldKey}>{field.label}</FieldLabel>
+      <FieldDescription id={`${field.fieldKey}-description`}>
         {field.description}
       </FieldDescription>
       <Container>
@@ -140,38 +139,23 @@ export const Field = ({
   )
 }
 
-export const Cell: CellComponent = ({ item, field, linkTo }) => {
-  const value = `${item[field.path]}`
-  return linkTo ? (
-    <CellLink {...linkTo}>{value}</CellLink>
-  ) : (
-    <CellContainer>{value}</CellContainer>
-  )
-}
-Cell.supportsLinkTo = true
-
-export const CardValue: CardValueComponent = ({ item, field }) => {
-  return (
-    <FieldContainer>
-      <FieldLabel>{field.label}</FieldLabel>
-      {item[field.path]}
-    </FieldContainer>
-  )
-}
+export const Cell: CellComponent = ({ value }) => (
+  <CellContainer>{value == null ? '' : String(value)}</CellContainer>
+)
 
 export const controller = (
   config: FieldControllerConfig<any>
 ): FieldController<string | null, string> => {
   return {
-    path: config.path,
+    fieldKey: config.fieldKey,
     label: config.label,
     description: config.description,
-    graphqlSelection: config.path,
+    graphqlSelection: config.fieldKey,
     defaultValue: null,
     deserialize: (data) => {
-      const value = data[config.path]
+      const value = data[config.fieldKey]
       return typeof value === 'string' ? value : null
     },
-    serialize: (value) => ({ [config.path]: value }),
+    serialize: (value) => ({ [config.fieldKey]: value }),
   }
 }

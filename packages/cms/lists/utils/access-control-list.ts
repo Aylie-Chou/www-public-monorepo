@@ -21,7 +21,7 @@ export const RoleEnum = {
 }
 
 export const allowRoles = (roles: string[]) => {
-  return ({ session }: { session: Session }) => {
+  return ({ session }: { session?: Session }) => {
     if (envVars.nodeEnv === 'test') {
       return true
     }
@@ -29,7 +29,7 @@ export const allowRoles = (roles: string[]) => {
     if (!Array.isArray(roles)) {
       return false
     }
-    return Boolean(roles.indexOf(session?.data.role) > -1)
+    return Boolean(roles.indexOf(session?.data.role ?? '') > -1)
   }
 }
 
@@ -49,10 +49,10 @@ export const allowAllRoles = () => {
 }
 
 export const denyRoles = (roles: string[]) => {
-  return ({ session }: { session: Session }) => {
+  return ({ session }: { session?: Session }) => {
     if (!Array.isArray(roles)) {
       return true
     }
-    return roles.indexOf(session?.data.role) === -1
+    return roles.indexOf(session?.data.role ?? '') === -1
   }
 }

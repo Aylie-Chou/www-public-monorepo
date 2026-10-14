@@ -9,22 +9,41 @@ import {
 import { CREATED_AT, SLUG, UPDATED_AT } from './utils/common-field'
 
 const listConfigurations = list({
+  fieldDefaults: {
+    ui: {
+      itemView: {
+        fieldMode: ({ session }) => {
+          if (
+            [RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor].indexOf(
+              session?.data.role
+            ) > -1
+          ) {
+            return 'edit'
+          } else {
+            return 'read'
+          }
+        },
+      },
+    },
+  },
   fields: {
     slug: SLUG,
     name: text({
+      ui: { label: '類別中文名稱' },
       isIndexed: 'unique',
-      label: '類別中文名稱',
+
       validation: { isRequired: true },
     }),
     subcategories: relationship({
+      ui: { label: 'Subcategories' },
       ref: 'Subcategory.category',
       many: true,
-      label: 'Subcategories',
     }),
     sortOrder: integer({
       isIndexed: 'unique',
-      label: 'Sort Order',
+
       ui: {
+        label: 'Sort Order',
         createView: {
           fieldMode: ({ session }) => {
             if (
@@ -49,27 +68,18 @@ const listConfigurations = list({
         },
       },
     }),
-    ogTitle: text({
-      label: 'og:title',
-    }),
-    ogDescription: text({
-      label: 'og:description',
-    }),
+    ogTitle: text({ ui: { label: 'og:title' } }),
+    ogDescription: text({ ui: { label: 'og:description' } }),
     ogImage: relationship({
       ref: 'Photo',
-      label: 'og:image',
-      ui: {
-        labelField: 'name',
-      },
+
+      ui: { label: 'og:image', labelField: 'name' },
     }),
     posts: relationship({
       ref: 'Post',
       many: true,
-      label: '相關文章',
-      ui: {
-        hideCreate: true,
-        labelField: 'title',
-      },
+
+      ui: { label: '相關文章', hideCreate: true, labelField: 'title' },
     }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,
@@ -92,19 +102,6 @@ const listConfigurations = list({
     },
     hideCreate: denyRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
     hideDelete: denyRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
-    itemView: {
-      defaultFieldMode: ({ session }) => {
-        if (
-          [RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor].indexOf(
-            session?.data.role
-          ) > -1
-        ) {
-          return 'edit'
-        } else {
-          return 'read'
-        }
-      },
-    },
   },
 })
 export default listConfigurations

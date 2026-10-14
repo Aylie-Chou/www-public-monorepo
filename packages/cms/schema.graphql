@@ -56,6 +56,7 @@ input StringFilter {
   contains: String
   startsWith: String
   endsWith: String
+  search: String
   not: NestedStringFilter
 }
 
@@ -70,6 +71,7 @@ input NestedStringFilter {
   contains: String
   startsWith: String
   endsWith: String
+  search: String
   not: NestedStringFilter
 }
 
@@ -227,6 +229,7 @@ input StringNullableFilter {
   contains: String
   startsWith: String
   endsWith: String
+  search: String
   not: StringNullableFilter
 }
 
@@ -452,6 +455,7 @@ input PostCreateInput {
 input AuthorRelateToManyForCreateInput {
   create: [AuthorCreateInput!]
   connect: [AuthorWhereUniqueInput!]
+  set: [AuthorWhereUniqueInput!]
 }
 
 input PhotoRelateToOneForCreateInput {
@@ -462,36 +466,43 @@ input PhotoRelateToOneForCreateInput {
 input PostFollowupRelateToManyForCreateInput {
   create: [PostFollowupCreateInput!]
   connect: [PostFollowupWhereUniqueInput!]
+  set: [PostFollowupWhereUniqueInput!]
 }
 
 input SubcategoryRelateToManyForCreateInput {
   create: [SubcategoryCreateInput!]
   connect: [SubcategoryWhereUniqueInput!]
+  set: [SubcategoryWhereUniqueInput!]
 }
 
 input TopicRelateToManyForCreateInput {
   create: [TopicCreateInput!]
   connect: [TopicWhereUniqueInput!]
+  set: [TopicWhereUniqueInput!]
 }
 
 input TagRelateToManyForCreateInput {
   create: [TagCreateInput!]
   connect: [TagWhereUniqueInput!]
+  set: [TagWhereUniqueInput!]
 }
 
 input PostRelateToManyForCreateInput {
   create: [PostCreateInput!]
   connect: [PostWhereUniqueInput!]
+  set: [PostWhereUniqueInput!]
 }
 
 input PushNotificationRelateToManyForCreateInput {
   create: [PushNotificationCreateInput!]
   connect: [PushNotificationWhereUniqueInput!]
+  set: [PushNotificationWhereUniqueInput!]
 }
 
 input UserRelateToManyForCreateInput {
   create: [UserCreateInput!]
   connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
 }
 
 type Photo {
@@ -510,11 +521,11 @@ type Photo {
 
 type ImageFieldOutput {
   id: ID!
+  url: String!
+  extension: ImageExtension!
   filesize: Int!
   width: Int!
   height: Int!
-  extension: ImageExtension!
-  url: String!
 }
 
 enum ImageExtension {
@@ -1482,16 +1493,19 @@ input UserCreateInput {
 input BookmarkRelateToManyForCreateInput {
   create: [BookmarkCreateInput!]
   connect: [BookmarkWhereUniqueInput!]
+  set: [BookmarkWhereUniqueInput!]
 }
 
 input PostReadingTimeRelateToManyForCreateInput {
   create: [PostReadingTimeCreateInput!]
   connect: [PostReadingTimeWhereUniqueInput!]
+  set: [PostReadingTimeWhereUniqueInput!]
 }
 
 input PostReadingFootprintRelateToManyForCreateInput {
   create: [PostReadingFootprintCreateInput!]
   connect: [PostReadingFootprintWhereUniqueInput!]
+  set: [PostReadingFootprintWhereUniqueInput!]
 }
 
 type Bookmark {
@@ -1760,7 +1774,6 @@ type Mutation {
   deletePostReadingFootprints(where: [PostReadingFootprintWhereUniqueInput!]!): [PostReadingFootprint]
   endSession: Boolean!
   authenticateReporterSystemUserWithPassword(email: String!, password: String!): ReporterSystemUserAuthenticationWithPasswordResult
-  createInitialReporterSystemUser(data: CreateInitialReporterSystemUserInput!): ReporterSystemUserAuthenticationWithPasswordSuccess!
   deleteAllLatestAndBulkCreate(deleteCondition: [LatestWhereUniqueInput!]!, createData: [LatestCreateInput!]!): [Latest!]!
   deleteAllReviewsAndBulkCreate(deleteCondition: [ReviewWhereUniqueInput!]!, createData: [ReviewCreateInput!]!): [Review!]!
 }
@@ -1774,13 +1787,6 @@ type ReporterSystemUserAuthenticationWithPasswordSuccess {
 
 type ReporterSystemUserAuthenticationWithPasswordFailure {
   message: String!
-}
-
-input CreateInitialReporterSystemUserInput {
-  name: String
-  email: String
-  password: String
-  role: String
 }
 
 type Query {
@@ -1836,10 +1842,8 @@ type Query {
   postReadingFootprints(where: PostReadingFootprintWhereInput! = {}, orderBy: [PostReadingFootprintOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostReadingFootprintWhereUniqueInput): [PostReadingFootprint!]
   postReadingFootprintsCount(where: PostReadingFootprintWhereInput! = {}): Int
   keystone: KeystoneMeta!
-  authenticatedItem: AuthenticatedItem
+  authenticatedItem: ReporterSystemUser
 }
-
-union AuthenticatedItem = ReporterSystemUser
 
 type KeystoneMeta {
   adminMeta: KeystoneAdminMeta!
@@ -1847,34 +1851,34 @@ type KeystoneMeta {
 
 type KeystoneAdminMeta {
   lists: [KeystoneAdminUIListMeta!]!
-  list(key: String!): KeystoneAdminUIListMeta
+  list(key: String!, itemId: ID): KeystoneAdminUIListMeta
 }
 
 type KeystoneAdminUIListMeta {
   key: String!
-  path: String!
   label: String!
   singular: String!
   plural: String!
-  description: String
-  pageSize: Int!
+  path: String!
   labelField: String!
   fields: [KeystoneAdminUIFieldMeta!]!
   groups: [KeystoneAdminUIFieldGroupMeta!]!
+  actions: [KeystoneAdminUIActionMeta!]!
   graphql: KeystoneAdminUIGraphQL!
+  pageSize: Int!
   initialColumns: [String!]!
   initialSearchFields: [String!]!
   initialSort: KeystoneAdminUISort
+  initialFilter: JSON
+  hiddenFilter: JSON
   isSingleton: Boolean!
+  hideNavigation: Boolean!
   hideCreate: Boolean!
   hideDelete: Boolean!
-  isHidden: Boolean!
-  itemQueryName: String!
-  listQueryName: String!
 }
 
 type KeystoneAdminUIFieldMeta {
-  path: String!
+  key: String!
   label: String!
   description: String
   isOrderable: Boolean!
@@ -1884,8 +1888,8 @@ type KeystoneAdminUIFieldMeta {
   viewsIndex: Int!
   customViewsIndex: Int
   createView: KeystoneAdminUIFieldMetaCreateView!
+  itemView: KeystoneAdminUIFieldMetaItemView
   listView: KeystoneAdminUIFieldMetaListView!
-  itemView(id: ID): KeystoneAdminUIFieldMetaItemView
   search: QueryMode
 }
 
@@ -1896,12 +1900,19 @@ enum KeystoneAdminUIFieldMetaIsNonNull {
 }
 
 type KeystoneAdminUIFieldMetaCreateView {
-  fieldMode: KeystoneAdminUIFieldMetaCreateViewFieldMode!
+  fieldMode: JSON!
+  isRequired: JSON!
 }
 
-enum KeystoneAdminUIFieldMetaCreateViewFieldMode {
-  edit
-  hidden
+type KeystoneAdminUIFieldMetaItemView {
+  fieldMode: JSON!
+  fieldPosition: KeystoneAdminUIFieldMetaItemViewFieldPosition!
+  isRequired: JSON!
+}
+
+enum KeystoneAdminUIFieldMetaItemViewFieldPosition {
+  form
+  sidebar
 }
 
 type KeystoneAdminUIFieldMetaListView {
@@ -1913,22 +1924,6 @@ enum KeystoneAdminUIFieldMetaListViewFieldMode {
   hidden
 }
 
-type KeystoneAdminUIFieldMetaItemView {
-  fieldMode: KeystoneAdminUIFieldMetaItemViewFieldMode
-  fieldPosition: KeystoneAdminUIFieldMetaItemViewFieldPosition
-}
-
-enum KeystoneAdminUIFieldMetaItemViewFieldMode {
-  edit
-  read
-  hidden
-}
-
-enum KeystoneAdminUIFieldMetaItemViewFieldPosition {
-  form
-  sidebar
-}
-
 enum QueryMode {
   default
   insensitive
@@ -1938,6 +1933,62 @@ type KeystoneAdminUIFieldGroupMeta {
   label: String!
   description: String
   fields: [KeystoneAdminUIFieldMeta!]!
+}
+
+type KeystoneAdminUIActionMeta {
+  key: String!
+  label: String!
+  icon: String
+  messages: KeystoneAdminUIActionMetaMessages!
+  graphql: KeystoneAdminUIActionMetaGraphQL
+  itemView: KeystoneAdminUIActionMetaItemView
+  listView: KeystoneAdminUIActionMetaListView!
+}
+
+type KeystoneAdminUIActionMetaMessages {
+  promptTitle: String!
+  promptTitleMany: String
+  prompt: String!
+  promptMany: String
+  promptConfirmLabel: String!
+  promptConfirmLabelMany: String
+  fail: String!
+  failMany: String
+  success: String!
+  successMany: String
+}
+
+type KeystoneAdminUIActionMetaGraphQL {
+  arguments: [KeystoneAdminUIActionMetaGraphQLArgument!]!
+  names: KeystoneAdminUIActionMetaGraphQLNames!
+}
+
+type KeystoneAdminUIActionMetaGraphQLArgument {
+  name: String!
+  type: String!
+  source: JSON
+}
+
+type KeystoneAdminUIActionMetaGraphQLNames {
+  one: String!
+  many: String
+}
+
+type KeystoneAdminUIActionMetaItemView {
+  actionMode: JSON!
+  navigation: KeystoneAdminUIActionMetaItemViewNavigation!
+  hidePrompt: Boolean!
+  hideToast: Boolean!
+}
+
+enum KeystoneAdminUIActionMetaItemViewNavigation {
+  follow
+  refetch
+  return
+}
+
+type KeystoneAdminUIActionMetaListView {
+  actionMode: JSON!
 }
 
 type KeystoneAdminUIGraphQL {

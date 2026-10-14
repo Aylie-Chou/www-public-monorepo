@@ -6,9 +6,9 @@
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build --no-prisma",
-    "db-migrate": "keystone prisma migrate deploy",
-    "postinstall": "keystone postinstall --fix",
-    "generate-migrate": "keystone prisma migrate dev"
+    "db-migrate": "prisma migrate deploy",
+    "postinstall": "keystone postinstall",
+    "generate-migrate": "keystone build --no-ui && prisma migrate dev"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.2.0",
@@ -17,23 +17,37 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.13.5",
     "@graphql-tools/schema": "^10.0.16",
-    "@keystone-6/auth": "^8.1.0",
-    "@keystone-6/core": "^6.5.2",
-    "@keystone-6/fields-document": "^9.1.0",
+    "@keystar/ui": "0.10.0",
+    "@keystone-6/auth": "10.0.5",
+    "@keystone-6/core": "patch:@keystone-6/core@npm%3A8.1.0#~/.yarn/patches/@keystone-6-core-npm-8.1.0-3d5678c6c8.patch",
+    "@keystone-6/fields-document": "11.0.5",
     "@lexical/link": "^0.33.1",
     "@lexical/react": "^0.33.1",
     "@lexical/table": "0.33.1",
+    "@prisma/adapter-mariadb": "^7.9.0",
+    "@prisma/client": "^7.9.0",
     "@twreporter/core": "^1.28.0",
     "@twreporter/lexical-editor": "^0.2.0-beta.26",
     "exifreader": "^4.23.3",
+    "express": "^5.2.1",
+    "graphql": "^16.14.2",
     "lodash": "^4.17.21",
+    "mariadb": "^3.4.5",
+    "next": "^16.0.0",
+    "prisma": "^7.9.0",
+    "react": "^19.0.0",
+    "react-aria": "3.50.0",
     "react-colorful": "^5.6.1",
+    "react-dom": "^19.0.0",
+    "react-stately": "3.48.0",
     "typescript": "^5.5.0"
   },
   "installConfig": {
     "hoistingLimits": "workspaces"
   },
-  "resolutions": {
-    "next": "14.2.35"
+  "devDependencies": {
+    "@types/express": "^5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19"
   }
 }

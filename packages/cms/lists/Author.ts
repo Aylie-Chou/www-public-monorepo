@@ -11,17 +11,16 @@ const listConfigurations = list({
   fields: {
     slug: SLUG,
     name: text({
+      ui: { label: '作者姓名' },
       isIndexed: true,
-      label: '作者姓名',
+
       validation: { isRequired: true },
     }),
     email: text(),
-    title: text({
-      label: '職稱',
-    }),
+    title: text({ ui: { label: '職稱' } }),
     bio: json({
-      label: '簡介',
       ui: {
+        label: '簡介',
         views: './lists/views/wysiwyg-editor',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -29,31 +28,22 @@ const listConfigurations = list({
       },
     }),
     avatar: relationship({
+      ui: { label: '大頭照' },
       ref: 'Photo',
       many: false,
-      label: '大頭照',
     }),
-    ogTitle: text({
-      label: 'og:title',
-    }),
-    ogDescription: text({
-      label: 'og:description',
-    }),
+    ogTitle: text({ ui: { label: 'og:title' } }),
+    ogDescription: text({ ui: { label: 'og:description' } }),
     ogImage: relationship({
       ref: 'Photo',
-      label: 'og:image',
-      ui: {
-        labelField: 'name',
-      },
+
+      ui: { label: 'og:image', labelField: 'name' },
     }),
     posts: relationship({
       ref: 'Post.authors',
       many: true,
-      label: '相關文章',
-      ui: {
-        hideCreate: true,
-        labelField: 'title',
-      },
+
+      ui: { label: '相關文章', hideCreate: true, labelField: 'title' },
     }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,

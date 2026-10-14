@@ -2,13 +2,12 @@
 // Modify your Keystone config when you want to change this.
 
 datasource mysql {
-  url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-  provider          = "mysql"
+  provider = "mysql"
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "./generated/prisma"
 }
 
 model ReporterSystemUser {
@@ -79,10 +78,10 @@ model Photo {
   id                         Int           @id @default(autoincrement())
   name                       String        @default("")
   imageFile_id               String?
+  imageFile_extension        String?
   imageFile_filesize         Int?
   imageFile_width            Int?
   imageFile_height           Int?
-  imageFile_extension        String?
   authors                    Author[]      @relation("Photo_authors")
   IPTC                       Json?
   copyright                  String?       @default("copyrighted")

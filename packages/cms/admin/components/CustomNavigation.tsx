@@ -1,92 +1,78 @@
-import { gql, useQuery } from '@keystone-6/core/admin-ui/apollo'
-import type { NavigationProps } from '@keystone-6/core/admin-ui/components'
+import { Button } from '@keystar/ui/button'
+import { useRouter } from '@keystone-6/core/admin-ui/router'
+import { gql, useMutation, useQuery } from '@keystone-6/core/admin-ui/apollo'
 import {
-  ListNavItems,
+  type NavigationProps,
+  NavContainer,
+  NavFooter,
   NavItem,
-  NavigationContainer,
+  NavList,
+  getHrefFromList,
 } from '@keystone-6/core/admin-ui/components'
-import React from 'react'
 import { RoleEnum } from '../../lists/utils/access-control-list'
 
-export function CustomNavigation({
-  authenticatedItem,
-  lists,
-}: NavigationProps) {
-  const isAuthenticated = authenticatedItem.state === 'authenticated'
-
-  const { data, loading, error } = useQuery(
-    gql`
-      query ($where: ReporterSystemUserWhereUniqueInput!) {
-        reporterSystemUser(where: $where) {
-          id
-          name
-          role
-        }
+const SESSION = gql`
+  query CmsNavigationSession {
+    authenticatedItem {
+      ... on ReporterSystemUser {
+        id
+        name
+        role
       }
-    `,
-    {
-      variables: {
-        where: { id: isAuthenticated ? authenticatedItem.id : null },
-      },
-      skip: !isAuthenticated,
     }
-  )
-
-  if (loading) {
-    return (
-      <NavigationContainer authenticatedItem={authenticatedItem}>
-        <div>Loading navigation...</div>
-      </NavigationContainer>
-    )
   }
-
-  if (error) {
-    return (
-      <NavigationContainer authenticatedItem={authenticatedItem}>
-        <div>Unable to load navigation. Please try refreshing the page.</div>
-      </NavigationContainer>
-    )
+`
+const END_SESSION = gql`
+  mutation CmsEndSession {
+    endSession
   }
+`
 
-  const userRole = isAuthenticated ? data?.reporterSystemUser?.role : null
-
-  const NAV_ITEMS = [
-    {
-      path: '/latest',
-      label: 'Latests',
-      allowedRoles: [
-        RoleEnum.Owner,
-        RoleEnum.Admin,
-        RoleEnum.Editor,
-        RoleEnum.Contributor,
-      ],
-    },
-    {
-      path: '/review',
-      label: 'Reviews',
-      allowedRoles: [
-        RoleEnum.Owner,
-        RoleEnum.Admin,
-        RoleEnum.Editor,
-        RoleEnum.Contributor,
-      ],
-    },
-  ]
-
-  const hasAccess = (allowedRoles: string[]) =>
-    isAuthenticated && userRole && allowedRoles.includes(userRole)
+export function CustomNavigation({ lists }: NavigationProps) {
+  const router = useRouter()
+  const { data, loading, error } = useQuery<{
+    authenticatedItem: { id: string; name: string; role: string } | null
+  }>(SESSION)
+  const [endSession, { loading: signingOut }] = useMutation(END_SESSION)
+  const user = data?.authenticatedItem
+  const canCurate =
+    !!user &&
+    [
+      RoleEnum.Owner,
+      RoleEnum.Admin,
+      RoleEnum.Editor,
+      RoleEnum.Contributor,
+    ].includes(user.role)
 
   return (
-    <NavigationContainer authenticatedItem={authenticatedItem}>
-      <NavItem href="/">Dashboard</NavItem>
-      <ListNavItems lists={lists} />
-      {NAV_ITEMS.map(({ path, label, allowedRoles }) =>
-        hasAccess(allowedRoles) ? (
-          <NavItem key={path} href={path}>
-            {label}
+    <NavContainer>
+      <NavList>
+        <NavItem href="/">Dashboard</NavItem>
+        {lists.map((list) => (
+          <NavItem key={list.key} href={getHrefFromList(list)}>
+            {list.label}
           </NavItem>
-        ) : null
-      )}
-    </NavigationContainer>
+        ))}
+        {canCurate && <NavItem href="/latest">Latests</NavItem>}
+        {canCurate && <NavItem href="/review">Reviews</NavItem>}
+      </NavList>
+      <NavFooter>
+        {loading && <div>Loading navigation...</div>}
+        {error && (
+          <div>Unable to load navigation. Please try refreshing the page.</div>
+        )}
+        {user && (
+          <Button
+            isPending={signingOut}
+            onPress={async () => {
+              await endSession()
+              await router.push('/signin')
+            }}
+          >
+            Sign out
+          </Button>
+        )}
+      </NavFooter>
+    </NavContainer>
   )
 }

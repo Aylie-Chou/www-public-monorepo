@@ -1,7 +1,7 @@
 import type { controller } from '@keystone-6/core/fields/types/json/views'
 import type { FieldProps } from '@keystone-6/core/types'
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
-import React, { useEffect, useState } from 'react'
+import { FieldContainer, FieldLabel } from '../../admin/components/controls'
+import { useMemo, type Dispatch, type SetStateAction } from 'react'
 import { DnD } from '../../DragAndDrop'
 
 export type RelationshipInfo = {
@@ -14,21 +14,20 @@ export const Field = ({
   value,
   onChange,
 }: FieldProps<typeof controller>) => {
-  const [prevValue, setPrevValue] = useState(value)
-  const [relationships, setRelationships] = useState<RelationshipInfo[]>(
-    value ? JSON.parse(value) : []
+  const relationships = useMemo<RelationshipInfo[]>(
+    () => (value ? JSON.parse(value) : []),
+    [value]
   )
 
-  // Pattern for monitoring props change:
-  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
-  if (value !== prevValue) {
-    setPrevValue(value)
-    setRelationships(value ? JSON.parse(value) : [])
+  const setRelationships: Dispatch<SetStateAction<RelationshipInfo[]>> = (
+    update
+  ) => {
+    if (!onChange) return
+    const next = typeof update === 'function' ? update(relationships) : update
+    if (JSON.stringify(next) !== JSON.stringify(relationships)) {
+      onChange(JSON.stringify(next))
+    }
   }
-
-  useEffect(() => {
-    onChange(JSON.stringify(relationships))
-  }, [relationships, onChange])
 
   const relationshipsDndComponent = (
     <DnD items={relationships} setItems={setRelationships} />

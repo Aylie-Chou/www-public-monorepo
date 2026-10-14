@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import { FieldContainer, FieldLabel } from '../../admin/components/controls'
 import React from 'react'
 
 const Table = styled.div`
@@ -38,13 +38,13 @@ export const Field = ({
   field,
   value,
 }: {
-  field: { path: string; label: string }
+  field: { fieldKey: string; label: string }
   value: string
 }) => {
   const valueObj = value ? JSON.parse(value) : {}
   return (
     <FieldContainer>
-      <FieldLabel htmlFor={field.path}>{field.label}</FieldLabel>
+      <FieldLabel htmlFor={field.fieldKey}>{field.label}</FieldLabel>
       <Table>
         <TableRow>
           <TableHeader>作者</TableHeader>

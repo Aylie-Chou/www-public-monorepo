@@ -1,10 +1,13 @@
-import type { Context } from '.keystone/types'
+import type { Context } from './generated/keystone/types'
 import Path from 'node:path'
+import express from 'express'
+import { PrismaMariaDb } from '@prisma/adapter-mariadb'
 import { mergeSchemas } from '@graphql-tools/schema'
 import { config } from '@keystone-6/core'
 import { session, withAuth } from './auth'
 import envVars from './environment-variables'
 import { listDefinition as lists } from './lists'
+import { getEditorStyleFiles } from './admin/editor-style-files'
 
 type LatestCreateInput = {
   tag: {
@@ -36,7 +39,9 @@ export default withAuth(
   config({
     db: {
       provider: 'mysql',
-      url: envVars.database.url,
+      prismaClientOptions: () => ({
+        adapter: new PrismaMariaDb(envVars.database.url),
+      }),
       idField: {
         kind: 'autoincrement',
       },
@@ -44,27 +49,20 @@ export default withAuth(
     ui: {
       // For our starter, we check that someone has session data before letting them see the Admin UI.
       isAccessAllowed: (context) => !!context.session?.data,
-      getAdditionalFiles: [
-        async () => [
-          {
-            mode: 'copy',
-            inputPath: Path.resolve('public/asset/favicon.ico'),
-            outputPath: 'public/favicon.ico',
-          },
-        ],
+      getAdditionalFiles: async () => [
+        ...(await getEditorStyleFiles()),
+        {
+          mode: 'copy',
+          inputPath: Path.resolve('public/asset/favicon.ico'),
+          outputPath: 'public/favicon.ico',
+        },
       ],
     },
     lists,
     session,
-    storage: {
-      images: {
-        kind: 'local',
-        type: 'image',
-        storagePath: envVars.images.storagePath,
-        serverRoute: {
-          path: '/images',
-        },
-        generateUrl: (path) => `/images${path}`,
+    server: {
+      extendExpressApp: (app) => {
+        app.use('/images', express.static(envVars.images.storagePath))
       },
     },
     graphql: {

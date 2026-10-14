@@ -1,4 +1,4 @@
-import { graphql, list } from '@keystone-6/core'
+import { g as graphql, list } from '@keystone-6/core'
 import {
   image,
   json,
@@ -10,6 +10,7 @@ import {
 import ExifReader from 'exifreader'
 import get from 'lodash/get'
 import envVar from '../environment-variables'
+import { imageStorage } from '../storage'
 import {
   allowAllRoles,
   allowRoles,
@@ -23,6 +24,26 @@ const _ = {
 }
 
 const listConfigurations = list({
+  fieldDefaults: {
+    ui: {
+      itemView: {
+        fieldMode: ({ session }) => {
+          if (
+            [
+              RoleEnum.Owner,
+              RoleEnum.Admin,
+              RoleEnum.Editor,
+              RoleEnum.Contributor,
+            ].indexOf(session?.data.role) > -1
+          ) {
+            return 'edit'
+          } else {
+            return 'read'
+          }
+        },
+      },
+    },
+  },
   hooks: {
     resolveInput: async ({ resolvedData, context }) => {
       if (resolvedData?.imageFile?.id && resolvedData?.imageFile?.extension) {
@@ -63,20 +84,19 @@ const listConfigurations = list({
   },
   fields: {
     name: text({
-      label: '標題',
+      ui: { label: '標題' },
+
       validation: { isRequired: true },
       isIndexed: true,
     }),
     imageFile: image({
-      storage: 'images',
+      storage: imageStorage,
     }),
     authors: relationship({
       ref: 'Author',
       many: true,
-      label: '作者',
-      ui: {
-        labelField: 'name',
-      },
+
+      ui: { label: '作者', labelField: 'name' },
     }),
     IPTC: json({
       ui: {
@@ -172,7 +192,7 @@ const listConfigurations = list({
     }),
   },
   ui: {
-    isHidden: denyRoles([
+    hideNavigation: denyRoles([
       RoleEnum.Owner,
       RoleEnum.Admin,
       RoleEnum.Editor,
@@ -196,22 +216,6 @@ const listConfigurations = list({
       initialColumns: ['name'],
       initialSort: { field: 'createdAt', direction: 'DESC' },
       pageSize: 50,
-    },
-    itemView: {
-      defaultFieldMode: ({ session }) => {
-        if (
-          [
-            RoleEnum.Owner,
-            RoleEnum.Admin,
-            RoleEnum.Editor,
-            RoleEnum.Contributor,
-          ].indexOf(session?.data.role) > -1
-        ) {
-          return 'edit'
-        } else {
-          return 'read'
-        }
-      },
     },
   },
 

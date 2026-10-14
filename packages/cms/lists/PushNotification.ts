@@ -17,18 +17,29 @@ import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 import { formatDateTime } from './utils/format-time'
 
 const listConfigurations = list({
+  fieldDefaults: {
+    ui: {
+      itemView: {
+        fieldMode: ({ session }) => {
+          if (
+            [RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor].indexOf(
+              session?.data.role
+            ) > -1
+          ) {
+            return 'edit'
+          } else {
+            return 'read'
+          }
+        },
+      },
+    },
+  },
   fields: {
     title: text({
-      label: '推播標題',
-      ui: {
-        createView: { fieldMode: 'hidden' },
-      },
+      ui: { label: '推播標題', createView: { fieldMode: 'hidden' } },
     }),
     link: text({
-      label: '推播連結',
-      ui: {
-        createView: { fieldMode: 'hidden' },
-      },
+      ui: { label: '推播連結', createView: { fieldMode: 'hidden' } },
     }),
     labelForCMS: text({
       ui: {
@@ -38,11 +49,11 @@ const listConfigurations = list({
       },
     }),
     publishedAt: timestamp({
-      label: '排定推播時間',
+      ui: { label: '排定推播時間' },
+
       validation: { isRequired: true },
     }),
     channel: multiselect({
-      label: '推播管道',
       type: 'string',
       options: [
         {
@@ -55,14 +66,13 @@ const listConfigurations = list({
         },
       ],
       defaultValue: ['webpush', 'telegram'],
-      ui: {
-        createView: { fieldMode: 'hidden' },
-      },
+      ui: { label: '推播管道', createView: { fieldMode: 'hidden' } },
     }),
     post: relationship({
       ref: 'Post.pushNotifications',
-      label: '關聯文章',
+
       ui: {
+        label: '關聯文章',
         hideCreate: true,
         labelField: 'title',
         createView: { fieldMode: 'hidden' },
@@ -74,7 +84,7 @@ const listConfigurations = list({
   ui: {
     label: 'Push Notifications',
     labelField: 'labelForCMS',
-    isHidden: denyRoles([
+    hideNavigation: denyRoles([
       RoleEnum.Owner,
       RoleEnum.Admin,
       RoleEnum.Editor,
@@ -84,19 +94,6 @@ const listConfigurations = list({
     hideDelete: denyRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
     listView: {
       initialColumns: ['title', 'publishedAt'],
-    },
-    itemView: {
-      defaultFieldMode: ({ session }) => {
-        if (
-          [RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor].indexOf(
-            session?.data.role
-          ) > -1
-        ) {
-          return 'edit'
-        } else {
-          return 'read'
-        }
-      },
     },
   },
   access: {

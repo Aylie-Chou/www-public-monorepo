@@ -1,14 +1,15 @@
-import { graphql } from '@keystone-6/core'
+import { g as graphql } from '@keystone-6/core'
 import {
   type BaseListTypeInfo,
   type CommonFieldConfig,
+  type SimpleFieldTypeInfo,
   type FieldTypeFunc,
   fieldType,
   orderDirectionEnum,
 } from '@keystone-6/core/types'
 
 type ColorFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
-  CommonFieldConfig<ListTypeInfo> & {
+  CommonFieldConfig<ListTypeInfo, SimpleFieldTypeInfo<'String'>> & {
     isIndexed?: boolean | 'unique'
   }
 

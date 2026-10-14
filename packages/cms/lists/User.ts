@@ -1,4 +1,4 @@
-import { graphql, list } from '@keystone-6/core'
+import { g as graphql, list } from '@keystone-6/core'
 import { relationship, text, virtual } from '@keystone-6/core/fields'
 import {
   allowAllRoles,
@@ -11,26 +11,27 @@ import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 const listConfigurations = list({
   fields: {
     twreporterID: text({
-      label: '會員管理系統 ID',
+      ui: { label: '會員管理系統 ID' },
+
       isIndexed: true,
     }),
     bookmark: relationship({
-      label: '書籤',
+      ui: { label: '書籤' },
+
       ref: 'Bookmark.user',
       many: true,
     }),
     postReading: relationship({
-      label: 'Post Reading Count',
       ref: 'Post.postReadingBy',
       many: true,
       ui: {
+        label: 'Post Reading Count',
         itemView: {
           fieldMode: 'hidden',
-        }
-      }
+        },
+      },
     }),
     postReadingCountView: virtual({
-      label: 'Post Reading Count',
       field: graphql.field({
         type: graphql.JSON,
         async resolve(item, _args, context) {
@@ -49,6 +50,7 @@ const listConfigurations = list({
         },
       }),
       ui: {
+        label: 'Post Reading Count',
         views: './lists/views/relationship-link',
         createView: {
           fieldMode: 'hidden',
@@ -62,17 +64,16 @@ const listConfigurations = list({
       },
     }),
     postReadingTime: relationship({
-      label: 'Post Reading Time',
       ref: 'PostReadingTime.user',
       many: true,
       ui: {
+        label: 'Post Reading Time',
         itemView: {
           fieldMode: 'hidden',
         },
       },
     }),
     postReadingTimeView: virtual({
-      label: 'Post Reading Time',
       field: graphql.field({
         type: graphql.JSON,
         async resolve(item, _args, context) {
@@ -93,6 +94,7 @@ const listConfigurations = list({
         },
       }),
       ui: {
+        label: 'Post Reading Time',
         views: './lists/views/relationship-link',
         createView: {
           fieldMode: 'hidden',
@@ -106,17 +108,16 @@ const listConfigurations = list({
       },
     }),
     postReadingFootprint: relationship({
-      label: 'Post Reading FootPrint',
       ref: 'PostReadingFootprint.user',
       many: true,
       ui: {
+        label: 'Post Reading FootPrint',
         itemView: {
           fieldMode: 'hidden',
         },
       },
     }),
     postReadingFootprintView: virtual({
-      label: 'Post Reading FootPrint',
       field: graphql.field({
         type: graphql.JSON,
         async resolve(item, _args, context) {
@@ -134,6 +135,7 @@ const listConfigurations = list({
         },
       }),
       ui: {
+        label: 'Post Reading FootPrint',
         views: './lists/views/relationship-link',
         createView: {
           fieldMode: 'hidden',

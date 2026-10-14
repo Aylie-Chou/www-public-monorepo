@@ -2,19 +2,18 @@ import styled from '@emotion/styled'
 import React from 'react'
 // type
 import type {
-  CardValueComponent,
   CellComponent,
   FieldController,
   FieldControllerConfig,
   FieldProps,
 } from '@keystone-6/core/types'
 // components
-import { CellContainer, CellLink } from '@keystone-6/core/admin-ui/components'
+import { CellContainer } from '@keystone-6/core/admin-ui/components'
 import {
   FieldContainer,
   FieldDescription,
   FieldLabel,
-} from '@keystone-ui/fields'
+} from '../../../admin/components/controls'
 
 const Container = styled.div`
   display: flex;
@@ -36,7 +35,7 @@ export const Field = ({
   if (!value) {
     return (
       <FieldContainer>
-        <FieldLabel htmlFor={field.path}>{field.label}</FieldLabel>
+        <FieldLabel htmlFor={field.fieldKey}>{field.label}</FieldLabel>
         <div>目前沒有資料</div>
       </FieldContainer>
     )
@@ -44,8 +43,8 @@ export const Field = ({
   const { summary, link } = value
   return (
     <FieldContainer>
-      <FieldLabel htmlFor={field.path}>{field.label}</FieldLabel>
-      <FieldDescription id={`${field.path}-description`}>
+      <FieldLabel htmlFor={field.fieldKey}>{field.label}</FieldLabel>
+      <FieldDescription id={`${field.fieldKey}-description`}>
         {field.description}
       </FieldDescription>
       <Container>
@@ -58,35 +57,20 @@ export const Field = ({
   )
 }
 
-export const Cell: CellComponent = ({ item, field, linkTo }) => {
-  const value = `${item[field.path]}`
-  return linkTo ? (
-    <CellLink {...linkTo}>{value}</CellLink>
-  ) : (
-    <CellContainer>{value}</CellContainer>
-  )
-}
-Cell.supportsLinkTo = true
-
-export const CardValue: CardValueComponent = ({ item, field }) => {
-  return (
-    <FieldContainer>
-      <FieldLabel>{field.label}</FieldLabel>
-      {item[field.path]}
-    </FieldContainer>
-  )
-}
+export const Cell: CellComponent = ({ value }) => (
+  <CellContainer>{value == null ? '' : String(value)}</CellContainer>
+)
 
 export const controller = (
   config: FieldControllerConfig
 ): FieldController<RelationshipLinkValue> => {
   return {
-    path: config.path,
+    fieldKey: config.fieldKey,
     label: config.label,
     description: config.description,
-    graphqlSelection: config.path,
+    graphqlSelection: config.fieldKey,
     defaultValue: null,
-    deserialize: (data) => data[config.path] ?? null,
+    deserialize: (data) => data[config.fieldKey] ?? null,
     serialize: () => {},
   }
 }

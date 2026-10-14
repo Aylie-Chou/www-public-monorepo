@@ -9,23 +9,41 @@ import {
 import { CREATED_AT, UPDATED_AT } from './utils/common-field'
 
 const listConfigurations = list({
+  fieldDefaults: {
+    ui: {
+      itemView: {
+        fieldMode: ({ session }) => {
+          if (
+            [RoleEnum.Owner, RoleEnum.Admin].indexOf(session?.data.role) > -1
+          ) {
+            return 'edit'
+          } else {
+            return 'read'
+          }
+        },
+      },
+    },
+  },
   fields: {
     name: text({
-      label: '姓名',
+      ui: { label: '姓名' },
+
       validation: { isRequired: true },
     }),
     email: text({
-      label: 'Email',
+      ui: { label: 'Email' },
+
       validation: { isRequired: true },
       isIndexed: 'unique',
-      isFilterable: true,
     }),
     password: password({
-      label: '密碼',
+      ui: { label: '密碼' },
+
       validation: { isRequired: true },
     }),
     role: select({
-      label: '角色權限',
+      ui: { label: '角色權限' },
+
       type: 'string',
       options: [
         {
@@ -71,20 +89,11 @@ const listConfigurations = list({
     updatedAt: UPDATED_AT,
   },
   ui: {
-    isHidden: denyRoles([RoleEnum.Owner, RoleEnum.Admin]),
+    hideNavigation: denyRoles([RoleEnum.Owner, RoleEnum.Admin]),
     hideCreate: denyRoles([RoleEnum.Owner, RoleEnum.Admin]),
     hideDelete: denyRoles([RoleEnum.Owner, RoleEnum.Admin]),
     listView: {
       initialColumns: ['name', 'role'],
-    },
-    itemView: {
-      defaultFieldMode: ({ session }) => {
-        if ([RoleEnum.Owner, RoleEnum.Admin].indexOf(session?.data.role) > -1) {
-          return 'edit'
-        } else {
-          return 'read'
-        }
-      },
     },
   },
   access: {

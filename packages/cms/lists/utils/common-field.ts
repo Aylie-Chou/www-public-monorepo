@@ -1,6 +1,7 @@
 import { text, timestamp } from '@keystone-6/core/fields'
 
 export const SLUG = text({
+  ui: { label: 'Slug' },
   validation: {
     isRequired: true,
     match: {
@@ -8,7 +9,7 @@ export const SLUG = text({
       explanation: '請輸入正確格式，僅能使用小寫英文、數字和符號(-)',
     },
   },
-  label: 'Slug',
+
   isIndexed: 'unique',
 })
 

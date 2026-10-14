@@ -1,6 +1,6 @@
 import type { controller } from '@keystone-6/core/fields/types/virtual/views'
 import type { FieldProps } from '@keystone-6/core/types'
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import { FieldContainer, FieldLabel } from '../../admin/components/controls'
 import Link from 'next/link'
 import React from 'react'
 

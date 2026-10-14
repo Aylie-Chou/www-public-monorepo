@@ -8,14 +8,30 @@ import {
 } from './utils/access-control-list'
 
 const listConfigurations = list({
+  fieldDefaults: {
+    ui: {
+      itemView: {
+        fieldMode: ({ session }) => {
+          if (
+            [RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor].indexOf(
+              session?.data.role
+            ) > -1
+          ) {
+            return 'edit'
+          } else {
+            return 'read'
+          }
+        },
+      },
+    },
+  },
   fields: {
     tag: relationship({
-      label: '標籤',
+      ui: { label: '標籤' },
+
       ref: 'Tag',
     }),
-    order: integer({
-      label: '排序',
-    }),
+    order: integer({ ui: { label: '排序' } }),
   },
   access: {
     operation: {
@@ -27,22 +43,9 @@ const listConfigurations = list({
   },
   ui: {
     label: 'Latest',
-    isHidden: true,
+    hideNavigation: true,
     hideCreate: denyRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
     hideDelete: denyRoles([RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor]),
-    itemView: {
-      defaultFieldMode: ({ session }) => {
-        if (
-          [RoleEnum.Owner, RoleEnum.Admin, RoleEnum.Editor].indexOf(
-            session?.data.role
-          ) > -1
-        ) {
-          return 'edit'
-        } else {
-          return 'read'
-        }
-      },
-    },
   },
 })
 export default listConfigurations

@@ -23,36 +23,40 @@ const listConfigurations = list({
   fields: {
     slug: SLUG,
     title: text({
-      label: '專題標題',
+      ui: { label: '專題標題' },
+
       validation: { isRequired: true },
       isIndexed: true,
     }),
     subtitle: text({
-      label: '專題副標',
+      ui: { label: '專題副標' },
+
       validation: { isRequired: false },
     }),
     headline: text({
-      label: '專題小標',
+      ui: { label: '專題小標' },
+
       validation: { isRequired: false },
     }),
     topicName: text({
-      label: '文章頁專題標',
       validation: { isRequired: false },
       ui: {
+        label: '文章頁專題標',
         description: '20個全型字以內視覺效果最佳。',
       },
     }),
     titlePosition: select({
+      ui: { label: '標題位置' },
       defaultValue: 'bottom',
       options: [
         { label: 'Center', value: 'center' },
         { label: 'Bottom', value: 'bottom' },
         { label: 'Bottom Left', value: 'bottom-left' },
       ],
-      label: '標題位置',
     }),
     state: select({
-      label: '狀態',
+      ui: { label: '狀態' },
+
       options: [
         { label: 'Draft', value: 'draft' },
         { label: 'Published', value: 'published' },
@@ -63,16 +67,11 @@ const listConfigurations = list({
       defaultValue: 'draft',
       isIndexed: true,
     }),
-    publishedDate: timestamp({
-      isIndexed: true,
-      label: '發布時間',
-    }),
-    updatedDate: timestamp({
-      label: '更新時間',
-    }),
+    publishedDate: timestamp({ ui: { label: '發布時間' }, isIndexed: true }),
+    updatedDate: timestamp({ ui: { label: '更新時間' } }),
     description: json({
-      label: '簡介',
       ui: {
+        label: '簡介',
         views: './lists/views/wysiwyg-editor',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -80,8 +79,8 @@ const listConfigurations = list({
       },
     }),
     teamDescription: json({
-      label: '製作人員名單',
       ui: {
+        label: '製作人員名單',
         views: './lists/views/wysiwyg-editor',
         createView: { fieldMode: 'edit' },
         listView: { fieldMode: 'hidden' },
@@ -91,53 +90,36 @@ const listConfigurations = list({
     posts: relationship({
       ref: 'Post',
       many: true,
-      label: '相關文章',
-      ui: {
-        hideCreate: true,
-      },
+
+      ui: { label: '相關文章', hideCreate: true },
     }),
     postLayout: select({
-      label: '相關文章版型',
       type: 'enum',
       options: [
         { label: 'In Row', value: 'row' },
         { label: 'In Column', value: 'column' },
       ],
       defaultValue: 'row',
-      ui: {
-        views: './lists/views/select-layout',
-      },
+      ui: { label: '相關文章版型', views: './lists/views/select-layout' },
     }),
-    postBackgroundColor: color({
-      label: '文章區背景色',
-    }),
-    heroImage: relationship({
-      ref: 'Photo',
-      label: '首圖',
-    }),
-    mobileHeroImage: relationship({
-      ref: 'Photo',
-      label: '手機首圖',
-    }),
+    postBackgroundColor: color({ ui: { label: '文章區背景色' } }),
+    heroImage: relationship({ ui: { label: '首圖' }, ref: 'Photo' }),
+    mobileHeroImage: relationship({ ui: { label: '手機首圖' }, ref: 'Photo' }),
     ogTitle: text({
+      ui: { label: 'og:title' },
       validation: { isRequired: false },
-      label: 'og:title',
     }),
     ogDescription: text({
-      label: 'og:description',
+      ui: { label: 'og:description' },
+
       validation: { isRequired: false },
     }),
-    ogImage: relationship({
-      ref: 'Photo',
-      label: 'og:image',
-    }),
+    ogImage: relationship({ ui: { label: 'og:image' }, ref: 'Photo' }),
     relatedPosts: relationship({
       ref: 'Post.relatedTopics',
       many: true,
-      label: '關聯文章',
-      ui: {
-        hideCreate: true,
-      },
+
+      ui: { label: '關聯文章', hideCreate: true },
     }),
     createdAt: CREATED_AT,
     updatedAt: UPDATED_AT,

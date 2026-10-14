@@ -4,15 +4,13 @@ import type {
   FieldProps,
   JSONValue,
 } from '@keystone-6/core/types'
-import { FieldContainer, FieldLabel } from '@keystone-ui/fields'
+import { FieldContainer, FieldLabel } from '../../../admin/components/controls'
 import React, { useMemo } from 'react'
 // lexical
 import { LexicalEditor } from '@twreporter/lexical-editor'
 import { LexicalBox, StyleWrapper } from './style'
 // config
 import createLexicalEditorConfig, { getFieldFeatureOverride } from './config'
-// css
-import '@twreporter/lexical-editor/style'
 
 type WysiwygFieldController = FieldController<string, string> & {
   listKey: string
@@ -23,20 +21,14 @@ export const Field = ({
   field,
   onChange,
 }: FieldProps<typeof controller>) => {
-  const valueJSON = useMemo(
-    () => (value ? JSON.parse(value) : null),
-    [value]
-  )
-  const lexicalEditorConfig = useMemo(
-    () => {
-      const features = getFieldFeatureOverride(field.listKey, field.path)
+  const valueJSON = useMemo(() => (value ? JSON.parse(value) : null), [value])
+  const lexicalEditorConfig = useMemo(() => {
+    const features = getFieldFeatureOverride(field.listKey, field.fieldKey)
 
-      return createLexicalEditorConfig({
-        ...(features ? { features } : {}),
-      })
-    },
-    [field.listKey, field.path]
-  )
+    return createLexicalEditorConfig({
+      ...(features ? { features } : {}),
+    })
+  }, [field.listKey, field.fieldKey])
 
   return (
     <FieldContainer>
@@ -60,10 +52,10 @@ export const controller = (
   config: ControllerConfig
 ): WysiwygFieldController => ({
   listKey: config.listKey,
-  path: config.path,
+  fieldKey: config.fieldKey,
   label: config.label,
   description: config.description,
-  graphqlSelection: config.path,
+  graphqlSelection: config.fieldKey,
   defaultValue:
     config.fieldMeta.defaultValue === null
       ? ''
@@ -81,7 +73,7 @@ export const controller = (
     }
   },
   deserialize: (data) => {
-    const fieldValue = data[config.path]
+    const fieldValue = data[config.fieldKey]
 
     if (fieldValue === null) {
       return ''
@@ -91,13 +83,13 @@ export const controller = (
   },
   serialize: (fieldValue) => {
     if (!fieldValue) {
-      return { [config.path]: null }
+      return { [config.fieldKey]: null }
     }
 
     try {
-      return { [config.path]: JSON.parse(fieldValue) }
+      return { [config.fieldKey]: JSON.parse(fieldValue) }
     } catch {
-      return { [config.path]: undefined }
+      return { [config.fieldKey]: undefined }
     }
   },
 })
