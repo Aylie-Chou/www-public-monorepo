@@ -2,6 +2,7 @@
   "name": "www-cms",
   "version": "0.1.0-beta.51",
   "private": true,
+  "packageManager": "yarn@4.6.0",
   "scripts": {
     "dev": "keystone dev",
     "start": "keystone start",

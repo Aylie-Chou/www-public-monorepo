@@ -1,0 +1,5 @@
+node_modules
+.keystone
+.next
+.yarn/install-state.gz
+*.bak

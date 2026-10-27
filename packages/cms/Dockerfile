@@ -1,5 +1,8 @@
 FROM node:22.23.1
 
+## Use the packageManager version instead of the image's Yarn Classic.
+RUN corepack enable
+
 ## Install system dependencies, `gcsfuse` in particular.
 RUN set -e; \
     apt-get update -y && apt-get install -y \
@@ -34,7 +37,8 @@ WORKDIR $APP_DIR
 COPY . $APP_DIR
 
 ## Install application dependencies
-RUN SKIP_BUILD_DEPS=true yarn install
+## This standalone package must adapt the copied monorepo lockfile.
+RUN SKIP_BUILD_DEPS=true yarn install --no-immutable
 
 ## Build application bundles
 RUN yarn build
