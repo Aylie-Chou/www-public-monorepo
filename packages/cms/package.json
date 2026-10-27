@@ -41,6 +41,7 @@
     "react-colorful": "^5.6.1",
     "react-dom": "^19.0.0",
     "react-stately": "3.48.0",
+    "rxjs": "^7.8.2",
     "typescript": "^5.5.0"
   },
   "installConfig": {
