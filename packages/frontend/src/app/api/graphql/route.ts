@@ -1,5 +1,5 @@
+import { randomUUID } from 'node:crypto'
 import { type NextRequest, NextResponse } from 'next/server'
-import { v4 as uuidV4 } from 'uuid'
 import keystoneFetch, { type GraphQLResponse } from '@/app/api/graphql/keystone'
 import logger from '@/utils/logger'
 
@@ -11,7 +11,7 @@ type Body = {
 export async function POST<T>(req: NextRequest) {
   const body = await req.json()
   const { query, variables } = body
-  const requestId = uuidV4()
+  const requestId = randomUUID()
   logger.info({ requestId, request: body }, 'incoming API request')
 
   const bodyForKeystone: Body = { query }
