@@ -5,6 +5,7 @@ import {
   $createEmbeddedCodeNode,
   $isEmbeddedCodeNode,
 } from '../plugins/EmbeddedCodePlugin/nodes/EmbeddedCodeNode'
+import { confirmEmbeddedCodeTrust } from '../plugins/EmbeddedCodePlugin/utils/embeddedCodeTrust'
 import EmbeddedCodeDisplayMode from '../plugins/EmbeddedCodePlugin/components/EmbeddedCodeDisplayMode'
 
 export default function EmbeddedCodeEditor({
@@ -22,10 +23,15 @@ export default function EmbeddedCodeEditor({
       return $isEmbeddedCodeNode(node) ? node.exportJSON().embeddedCode : ''
     })
   )
+  const [acceptedCode, setAcceptedCode] = useState(code)
   const [preview, setPreview] = useState(false)
 
-  const updateCode = (value: string) => {
+  const acceptCode = (value: string) => {
+    if (!confirmEmbeddedCodeTrust(value)) {
+      return
+    }
     setCode(value)
+    setAcceptedCode(value)
     setPreview(false)
     editor.update(
       () => {
@@ -50,19 +56,44 @@ export default function EmbeddedCodeEditor({
           <textarea
             id={inputId}
             value={code}
-            onChange={(event) => updateCode(event.target.value)}
+            onChange={(event) => {
+              setCode(event.target.value)
+              setPreview(false)
+            }}
             spellCheck={false}
             rows={8}
           />
-          <button type="button" onClick={() => setPreview(!preview)}>
-            {preview ? '關閉預覽' : '預覽'}
+          <button
+            type="button"
+            onClick={() => acceptCode(code)}
+            disabled={code === acceptedCode}
+          >
+            Confirm
           </button>
-          <button type="button" onClick={() => updateCode('')} disabled={!code}>
+          {code !== acceptedCode && <output>尚未確認變更</output>}
+          <button
+            type="button"
+            onClick={() => acceptCode('')}
+            disabled={!code && !acceptedCode}
+          >
             移除
           </button>
         </div>
       )}
-      {(readOnly || preview) && code && (
+      <button
+        type="button"
+        disabled={!code.trim()}
+        onClick={() => {
+          if (preview) {
+            setPreview(false)
+          } else if (confirmEmbeddedCodeTrust(code)) {
+            setPreview(true)
+          }
+        }}
+      >
+        {preview ? '關閉預覽' : '預覽'}
+      </button>
+      {preview && code && (
         <div className="embedded-code-editor__preview">
           <EmbeddedCodeDisplayMode
             embeddedCode={code}
