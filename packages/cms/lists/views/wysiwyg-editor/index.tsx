@@ -5,11 +5,12 @@ import type {
   JSONValue,
 } from '@keystone-6/core/types'
 import { FieldContainer, FieldLabel } from '../../../admin/components/controls'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 // lexical
 import { LexicalEditor } from '@twreporter/lexical-editor'
 import { LexicalBox, StyleWrapper } from './style'
 import { PostContentStyleWrapper } from './style/post-content'
+import { HeroEmbeddedStyleWrapper } from './style/hero-embedded'
 // config
 import createLexicalEditorConfig, { getFieldFeatureOverride } from './config'
 
@@ -31,9 +32,15 @@ export const Field = ({
     })
   }, [field.listKey, field.fieldKey])
   const ContentStyle =
-     field.listKey === 'Post' && field.fieldKey === 'content'
-       ? PostContentStyleWrapper
-       : StyleWrapper
+    field.listKey === 'Post' && field.fieldKey === 'heroEmbedded'
+      ? HeroEmbeddedStyleWrapper
+      : field.listKey === 'Post' && field.fieldKey === 'content'
+        ? PostContentStyleWrapper
+        : StyleWrapper
+  const editorMode =
+    field.listKey === 'Post' && field.fieldKey === 'heroEmbedded'
+      ? 'embedded-code'
+      : 'rich-text'
 
   return (
     <FieldContainer>
@@ -43,7 +50,11 @@ export const Field = ({
           <LexicalEditor
             value={valueJSON}
             onChange={onChange}
-            config={lexicalEditorConfig}
+            config={{
+              ...lexicalEditorConfig,
+              readOnly: !onChange,
+              mode: editorMode,
+            }}
           />
         </ContentStyle>
       </LexicalBox>

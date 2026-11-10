@@ -132,6 +132,15 @@ const listConfigurations = list({
       },
     }),
     heroImage: relationship({ ui: { label: '首圖' }, ref: 'Photo' }),
+    heroEmbedded: json({
+      ui: {
+        label: '首圖 Embedded',
+        views: './lists/views/wysiwyg-editor',
+        createView: { fieldMode: 'edit' },
+        listView: { fieldMode: 'hidden' },
+        itemView: { fieldMode: 'edit' },
+      },
+    }),
     heroSize: select({
       ui: { label: '首圖尺寸' },
 

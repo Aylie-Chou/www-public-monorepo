@@ -137,6 +137,7 @@ type Post {
   heroImage: Photo
   heroSize: String
   heroCaption: String
+  heroEmbedded: JSON
   brief: JSON
   content: JSON
   postFollowups(where: PostFollowupWhereInput! = {}, orderBy: [PostFollowupOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostFollowupWhereUniqueInput): [PostFollowup!]
@@ -319,6 +320,7 @@ input PostUpdateInput {
   heroImage: PhotoRelateToOneForUpdateInput
   heroSize: String
   heroCaption: String
+  heroEmbedded: JSON
   brief: JSON
   content: JSON
   postFollowups: PostFollowupRelateToManyForUpdateInput
@@ -425,6 +427,7 @@ input PostCreateInput {
   heroImage: PhotoRelateToOneForCreateInput
   heroSize: String
   heroCaption: String
+  heroEmbedded: JSON
   brief: JSON
   content: JSON
   postFollowups: PostFollowupRelateToManyForCreateInput

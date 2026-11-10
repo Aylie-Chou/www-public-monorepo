@@ -80,6 +80,7 @@ export type UploadImageConfig = {
 }
 
 export type EditorConfig = {
+  mode?: 'rich-text' | 'embedded-code'
   theme: EditorTheme
   plugins?: EditorPluginFlags
   features?: EditorFeatureConfig

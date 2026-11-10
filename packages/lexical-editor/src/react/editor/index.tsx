@@ -10,6 +10,7 @@ import { OnChangePlugin } from '../plugins/OnChangePlugin'
 import buildImportMap from '../utils/buildImportMap'
 // components
 import RichEditor from './RichEditor'
+import EmbeddedCodeEditor from './EmbeddedCodeEditor'
 // types
 import type { EditorThemeTokens, LexicalEditorProps } from '../../core'
 
@@ -96,12 +97,18 @@ export const LexicalEditor = ({
   return (
     <div className="lexical-editor" style={themeTokenStyle}>
       <LexicalComposer initialConfig={initialConfig}>
-        <ImageConfigContext value={config.image}>
-          <ToolbarContext>
-            <RichEditor config={config} placeholder={placeholder} />
-          </ToolbarContext>
-        </ImageConfigContext>
-        <OnChangePlugin onChange={onEditorStateChange} />
+        {config.mode === 'embedded-code' ? (
+          <EmbeddedCodeEditor readOnly={config.readOnly} onChange={onChange} />
+        ) : (
+          <>
+            <ImageConfigContext value={config.image}>
+              <ToolbarContext>
+                <RichEditor config={config} placeholder={placeholder} />
+              </ToolbarContext>
+            </ImageConfigContext>
+            <OnChangePlugin onChange={onEditorStateChange} />
+          </>
+        )}
       </LexicalComposer>
     </div>
   )

@@ -34,6 +34,7 @@ model Post {
   heroImageId                    Int?                   @map("heroImage")
   heroSize                       String?                @default("medium")
   heroCaption                    String                 @default("")
+  heroEmbedded                   Json?
   brief                          Json?
   content                        Json?
   postFollowups                  PostFollowup[]         @relation("Post_postFollowups")
