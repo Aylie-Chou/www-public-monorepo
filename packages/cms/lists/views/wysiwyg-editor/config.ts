@@ -1,5 +1,8 @@
 import { createEmotionEditorTheme } from '@twreporter/lexical-editor/theme-emotion'
-import { colorGrayscale, colorSupportive } from '@twreporter/core/lib/constants/color'
+import {
+  colorGrayscale,
+  colorSupportive,
+} from '@twreporter/core/lib/constants/color'
 import {
   cmsEditorNodes,
   type EditorConfig,
@@ -10,81 +13,16 @@ import { getDbImageSrcSet, searchPhotoHandler } from './searchPhotoHandler'
 
 type CreateCmsEditorConfigOptions = {
   features?: EditorFeatureConfig
-}
-
-export const fieldFeatureOverrides = {
-  'Author.bio': {
-    image: false,
-    embeddedCode: false,
-    quote: false,
-    infobox: false,
-    slideShow: false,
-    h4: false,
-    annotation: false,
-  },
-  'Post.brief': {
-    image: false,
-    embeddedCode: false,
-    quote: false,
-    infobox: false,
-    slideShow: false,
-    h4: false,
-    annotation: true,
-  },
-  'Post.content': {
-    image: true,
-    embeddedCode: true,
-    quote: true,
-    infobox: true,
-    slideShow: true,
-    h4: false,
-    annotation: true,
-  },
-  'PostFollowup.content': {
-    image: true,
-    embeddedCode: false,
-    quote: true,
-    infobox: false,
-    slideShow: false,
-    h4: false,
-    annotation: true,
-  },
-  'Topic.teamDescription': {
-    image: true,
-    embeddedCode: false,
-    quote: false,
-    infobox: false,
-    slideShow: false,
-    h4: false,
-    annotation: true,
-  },
-  'Topic.description': {
-    image: true,
-    embeddedCode: true,
-    quote: false,
-    infobox: true,
-    slideShow: true,
-    h4: false,
-    annotation: true,
-  },
-} satisfies Record<string, EditorFeatureConfig>
-
-export const getFieldFeatureOverride = (
-  listKey: string,
-  fieldPath: string
-): EditorFeatureConfig | undefined => {
-  const overrideKey = `${listKey}.${fieldPath}`
-
-  return overrideKey in fieldFeatureOverrides
-    ? fieldFeatureOverrides[overrideKey as keyof typeof fieldFeatureOverrides]
-    : undefined
+  mode?: EditorConfig['mode']
 }
 
 const createCmsEditorConfig = ({
   features,
+  mode = 'rich-text',
 }: CreateCmsEditorConfigOptions = {}): EditorConfig => ({
   theme: createCmsEditorTheme(),
   nodes: cmsEditorNodes,
+  mode,
   ...(features ? { features } : {}),
   ui: { toolbar: true },
   image: {

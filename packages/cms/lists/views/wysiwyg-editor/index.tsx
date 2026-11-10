@@ -8,11 +8,10 @@ import { FieldContainer, FieldLabel } from '../../../admin/components/controls'
 import { useMemo } from 'react'
 // lexical
 import { LexicalEditor } from '@twreporter/lexical-editor'
-import { LexicalBox, StyleWrapper } from './style'
-import { PostContentStyleWrapper } from './style/post-content'
-import { HeroEmbeddedStyleWrapper } from './style/hero-embedded'
+import { LexicalBox } from './style'
 // config
-import createLexicalEditorConfig, { getFieldFeatureOverride } from './config'
+import createLexicalEditorConfig from './config'
+import { getFieldConfig } from './field-config'
 
 type WysiwygFieldController = FieldController<string, string> & {
   listKey: string
@@ -24,23 +23,15 @@ export const Field = ({
   onChange,
 }: FieldProps<typeof controller>) => {
   const valueJSON = useMemo(() => (value ? JSON.parse(value) : null), [value])
-  const lexicalEditorConfig = useMemo(() => {
-    const features = getFieldFeatureOverride(field.listKey, field.fieldKey)
-
-    return createLexicalEditorConfig({
-      ...(features ? { features } : {}),
-    })
-  }, [field.listKey, field.fieldKey])
-  const ContentStyle =
-    field.listKey === 'Post' && field.fieldKey === 'heroEmbedded'
-      ? HeroEmbeddedStyleWrapper
-      : field.listKey === 'Post' && field.fieldKey === 'content'
-        ? PostContentStyleWrapper
-        : StyleWrapper
-  const editorMode =
-    field.listKey === 'Post' && field.fieldKey === 'heroEmbedded'
-      ? 'embedded-code'
-      : 'rich-text'
+  const { ContentStyle, mode, features } = getFieldConfig(
+    field.listKey,
+    field.fieldKey
+  )
+  const lexicalEditorConfig = useMemo(
+    () =>
+      createLexicalEditorConfig({ mode, ...(features ? { features } : {}) }),
+    [mode, features]
+  )
 
   return (
     <FieldContainer>
@@ -53,7 +44,6 @@ export const Field = ({
             config={{
               ...lexicalEditorConfig,
               readOnly: !onChange,
-              mode: editorMode,
             }}
           />
         </ContentStyle>
